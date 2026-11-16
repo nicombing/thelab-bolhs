@@ -2,7 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "elfin5_explorer_journal_v1";
-  const MIN_WORDS = 200;
+  const MIN_WORDS = 100;
   const MISSIONS = window.MISSIONS_DATA || [];
 
   let state = loadState();
@@ -202,7 +202,7 @@
     if (completed >= 6) rank = "Grand Semester Champion";
     else if (completed >= 4) rank = "Master Story Explorer";
     else if (completed >= 2) rank = "Knowledge Builder";
-    else if (completed >= 1 || totalWords >= 200) rank = "Brave Idea Writer";
+    else if (completed >= 1 || totalWords >= MIN_WORDS) rank = "Brave Idea Writer";
 
     return { completed, totalWords, totalStars, maxStars, rank };
   }
