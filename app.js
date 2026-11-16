@@ -4,6 +4,9 @@
   const STORAGE_KEY = "elfin5_explorer_journal_v1";
   const MIN_WORDS = 100;
   const ADMIN_PASSWORD = "qw3rty";
+  const SUPABASE_URL = "https://dcoqoonpdxtfhslyjirb.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_2KMKUCuf1tCSOZ5CfLIkcw_HM81Xq9h";
+  const SUPABASE_TABLE = "thelab_bolhs_submissions";
   const MISSIONS = window.MISSIONS_DATA || [];
   const CLASS_STUDENTS = [
     "Ariella",
@@ -219,6 +222,182 @@
     }
     state.missions = normalizeMissionsMap(state.profiles[name]);
     saveState();
+    fetchStudentFromCloud(name);
+  }
+
+  // ---------- Cloud Sync (Supabase REST) ----------
+
+  const cloudStatus = {
+    ok: null,
+    missingTable: false,
+    lastError: "",
+    lastSyncedAt: null
+  };
+  const draftSyncTimers = {};
+
+  async function supabaseRequest(path, options) {
+    const opts = options || {};
+    const headers = Object.assign(
+      {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json"
+      },
+      opts.headers || {}
+    );
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, Object.assign({}, opts, { headers }));
+    if (!res.ok) {
+      let bodyText = "";
+      try {
+        bodyText = await res.text();
+      } catch (_) {}
+      const missingTable =
+        res.status === 404 ||
+        /PGRST205|does not exist|Could not find the table/i.test(bodyText);
+      const err = new Error(bodyText || `HTTP ${res.status}`);
+      err.missingTable = missingTable;
+      err.status = res.status;
+      throw err;
+    }
+    if (res.status === 204) return null;
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  }
+
+  async function syncMissionToCloud(studentName, missionId) {
+    if (!studentName || !missionId) return;
+    const missionsMap =
+      state.studentName === studentName
+        ? state.missions
+        : state.profiles[studentName];
+    if (!missionsMap || !missionsMap[missionId]) return;
+    const ms = missionsMap[missionId];
+    const combinedText = (ms.submittedText || ms.draft || "").trim();
+    const payload = {
+      student_name: studentName,
+      mission_id: missionId,
+      draft: ms.draft || "",
+      submitted_text: ms.submittedText || "",
+      submitted_at: ms.submittedAt || null,
+      word_count: countWords(combinedText),
+      warmup_answers: ms.warmupAnswers || {},
+      checked_outline: Array.isArray(ms.checkedOutline) ? ms.checkedOutline : [],
+      updated_at: new Date().toISOString()
+    };
+
+    try {
+      await supabaseRequest(`${SUPABASE_TABLE}?on_conflict=student_name,mission_id`, {
+        method: "POST",
+        headers: {
+          Prefer: "resolution=merge-duplicates,return=minimal"
+        },
+        body: JSON.stringify(payload)
+      });
+      cloudStatus.ok = true;
+      cloudStatus.missingTable = false;
+      cloudStatus.lastError = "";
+      cloudStatus.lastSyncedAt = new Date();
+    } catch (err) {
+      cloudStatus.ok = false;
+      cloudStatus.missingTable = Boolean(err && err.missingTable);
+      cloudStatus.lastError = err && err.message ? err.message : "Cloud sync failed";
+    }
+  }
+
+  function scheduleMissionCloudSync(studentName, missionId, immediate) {
+    if (!studentName || !missionId) return;
+    const key = `${studentName}::${missionId}`;
+    if (draftSyncTimers[key]) {
+      clearTimeout(draftSyncTimers[key]);
+      delete draftSyncTimers[key];
+    }
+    if (immediate) {
+      syncMissionToCloud(studentName, missionId);
+      return;
+    }
+    draftSyncTimers[key] = setTimeout(() => {
+      delete draftSyncTimers[key];
+      syncMissionToCloud(studentName, missionId);
+    }, 1200);
+  }
+
+  function mergeCloudRowsIntoProfiles(rows) {
+    if (!Array.isArray(rows)) return;
+    rows.forEach((row) => {
+      if (!row || !row.student_name || !row.mission_id) return;
+      if (!state.profiles[row.student_name]) {
+        state.profiles[row.student_name] = createEmptyMissionsMap();
+      }
+      const normalized = normalizeMissionsMap({
+        [row.mission_id]: {
+          draft: row.draft || "",
+          submittedText: row.submitted_text || "",
+          submittedAt: row.submitted_at || null,
+          warmupAnswers: row.warmup_answers || {},
+          checkedOutline: row.checked_outline || []
+        }
+      })[row.mission_id];
+
+      state.profiles[row.student_name][row.mission_id] = normalized;
+      if (state.studentName === row.student_name) {
+        state.missions[row.mission_id] = normalized;
+      }
+    });
+  }
+
+  async function fetchStudentFromCloud(studentName) {
+    if (!studentName) return;
+    try {
+      const rows = await supabaseRequest(
+        `${SUPABASE_TABLE}?student_name=eq.${encodeURIComponent(studentName)}&select=*`,
+        { method: "GET" }
+      );
+      if (Array.isArray(rows) && rows.length > 0) {
+        mergeCloudRowsIntoProfiles(rows);
+        saveState();
+        if (state.studentName === studentName) {
+          if (welcomeView && !welcomeView.classList.contains("hidden")) {
+            updateWelcomePreview();
+          }
+          if (hubView && !hubView.classList.contains("hidden")) {
+            renderHub();
+          }
+          renderGlobalStats();
+        }
+      }
+      cloudStatus.ok = true;
+      cloudStatus.missingTable = false;
+      cloudStatus.lastError = "";
+      cloudStatus.lastSyncedAt = new Date();
+    } catch (err) {
+      cloudStatus.ok = false;
+      cloudStatus.missingTable = Boolean(err && err.missingTable);
+      cloudStatus.lastError = err && err.message ? err.message : "Cloud fetch failed";
+    }
+  }
+
+  async function fetchAllFromCloud() {
+    try {
+      const rows = await supabaseRequest(`${SUPABASE_TABLE}?select=*`, { method: "GET" });
+      if (Array.isArray(rows)) {
+        mergeCloudRowsIntoProfiles(rows);
+        saveState();
+      }
+      cloudStatus.ok = true;
+      cloudStatus.missingTable = false;
+      cloudStatus.lastError = "";
+      cloudStatus.lastSyncedAt = new Date();
+      return { ok: true, missingTable: false, count: Array.isArray(rows) ? rows.length : 0 };
+    } catch (err) {
+      cloudStatus.ok = false;
+      cloudStatus.missingTable = Boolean(err && err.missingTable);
+      cloudStatus.lastError = err && err.message ? err.message : "Cloud fetch failed";
+      return {
+        ok: false,
+        missingTable: cloudStatus.missingTable,
+        error: cloudStatus.lastError
+      };
+    }
   }
 
   function getStatsForStudent(name) {
@@ -625,6 +804,7 @@
         const oIdx = Number(btn.dataset.oIdx);
         state.missions[mission.id].warmupAnswers[qIdx] = oIdx;
         saveState();
+        scheduleMissionCloudSync(state.studentName, mission.id, true);
         renderWarmup(mission);
         renderGlobalStats();
       });
@@ -839,6 +1019,7 @@
         }
         cb.closest(".checklist-item").classList.toggle("is-checked", cb.checked);
         saveState();
+        scheduleMissionCloudSync(state.studentName, mission.id, true);
       });
     });
 
@@ -897,6 +1078,7 @@
       }
     }
     saveState();
+    scheduleMissionCloudSync(state.studentName, currentMissionId, true);
   }
 
   // ---------- Render Report View ----------
@@ -1038,19 +1220,30 @@
       minute: "2-digit",
       second: "2-digit"
     });
+    let syncBadge = "Cloud synced";
+    if (cloudStatus.missingTable) {
+      syncBadge = "Cloud table setup needed (local cache)";
+    } else if (cloudStatus.ok === false) {
+      syncBadge = "Cloud offline (local cache)";
+    } else if (cloudStatus.ok === null) {
+      syncBadge = "Syncing cloud...";
+    }
     adminRefreshStatus.innerHTML = `
       <span class="motion-live-dot" aria-hidden="true"></span>
-      <span>Auto-refresh: 5s • Updated ${escapeHtml(nowLabel)}</span>
+      <span>${escapeHtml(syncBadge)} • Auto-refresh: 5s • Updated ${escapeHtml(nowLabel)}</span>
     `;
   }
 
-  function refreshAdminFromStorage() {
+  async function refreshAdminFromStorage() {
     if (!isAdminUnlocked || !adminView || adminView.classList.contains("hidden")) return;
     const fresh = loadState();
     state.profiles = fresh.profiles;
     if (state.studentName && state.profiles[state.studentName]) {
       state.missions = normalizeMissionsMap(state.profiles[state.studentName]);
     }
+    renderAdminDashboard();
+    await fetchAllFromCloud();
+    if (!isAdminUnlocked || !adminView || adminView.classList.contains("hidden")) return;
     renderAdminDashboard();
     updateAdminRefreshTimestamp();
   }
@@ -1067,6 +1260,7 @@
     renderAdminDashboard();
     showView("admin");
     startAdminAutoRefresh();
+    refreshAdminFromStorage();
   }
 
   function renderAdminDashboard() {
@@ -1420,6 +1614,7 @@
       if (!mission) return;
       state.missions[mission.id].draft = essayTextarea.value;
       saveState();
+      scheduleMissionCloudSync(state.studentName, mission.id, false);
       draftSaveStatus.textContent = "Draft saved";
       updateWritingMetrics(mission);
       renderGlobalStats();
@@ -1437,6 +1632,7 @@
       state.missions[mission.id].submittedText = text;
       state.missions[mission.id].submittedAt = new Date().toISOString();
       saveState();
+      scheduleMissionCloudSync(state.studentName, mission.id, true);
 
       draftSaveStatus.textContent = "Submitted & saved";
       updateWritingMetrics(mission);
@@ -1472,6 +1668,7 @@
       state.missions[mission.id].submittedText = "";
       state.missions[mission.id].submittedAt = null;
       saveState();
+      scheduleMissionCloudSync(state.studentName, mission.id, true);
 
       essayTextarea.value = "";
       draftSaveStatus.textContent = "Draft cleared";
