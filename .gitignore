@@ -1,0 +1,7 @@
+# Reference textbook PDFs and audio files (excluded from git)
+Grade 5 - English/
+
+# OS & editor files
+.DS_Store
+Thumbs.db
+desktop.ini

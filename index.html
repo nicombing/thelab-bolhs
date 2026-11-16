@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elfin 5 Explorer Journal — Semester English Review</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Sticky Bar -->
+    <header class="topbar no-print">
+      <div class="container topbar-inner">
+        <button type="button" id="brand-home-btn" class="brand" aria-label="Go to Missions Home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 6.5A2.5 2.5 0 0 1 7.5 4H14a4 4 0 0 1 2 4v18a3 3 0 0 0-3-3H7.5A2.5 2.5 0 0 1 5 20.5v-14Z"/>
+              <path d="M27 6.5A2.5 2.5 0 0 0 24.5 4H18a4 4 0 0 0-2 4v18a3 3 0 0 1 3-3h5.5A2.5 2.5 0 0 0 27 20.5v-14Z"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong>Elfin 5 Explorer</strong>
+            <small>Grade 5 Semester Review</small>
+          </span>
+        </button>
+
+        <div class="topbar-status">
+          <div class="student-chip" id="student-chip-wrap">
+            <label for="student-name-input" class="sr-only">Student Name</label>
+            <input
+              type="text"
+              id="student-name-input"
+              class="student-input"
+              placeholder="Your Name..."
+              maxlength="40"
+              autocomplete="name"
+            >
+            <span class="chip-divider" aria-hidden="true"></span>
+            <label for="student-class-input" class="sr-only">Class</label>
+            <input
+              type="text"
+              id="student-class-input"
+              class="student-input student-class-input"
+              placeholder="Class (e.g. 5A)"
+              maxlength="12"
+            >
+          </div>
+
+          <div class="progress-pill" aria-live="polite">
+            <span class="pill-dot" aria-hidden="true"></span>
+            <span id="overall-progress-text">0 / 6 Completed</span>
+          </div>
+
+          <button type="button" id="open-report-btn" class="btn btn-secondary btn-sm">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>My Report</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+      <!-- VIEW 1: MISSION HUB -->
+      <section id="hub-view" class="hub-view container">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <div class="eyebrow">
+              <span class="eyebrow-badge">Units 1–8 Review Quest</span>
+              <span class="eyebrow-meta">Read • Warm Up • Explain (200+ Words)</span>
+            </div>
+            <h1>Read the Clues, Then Share Your Big Ideas!</h1>
+            <p class="hero-desc">
+              Welcome back, Grade 5 Explorer! This semester you learned about <strong>plants, houses, birds, money, matter, viruses, world heritage sites,</strong> and <strong>the human body</strong>. Pick a mission below, read the study guide carefully, test your memory, and write at least <strong>200 words</strong> to solve the challenge at the bottom.
+            </p>
+            <div class="hero-stats-grid">
+              <div class="stat-box">
+                <span class="stat-label">Missions Finished</span>
+                <strong class="stat-value" id="hub-completed-count">0 / 6</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Total Words Written</span>
+                <strong class="stat-value" id="hub-total-words">0</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Clue Stars Earned</span>
+                <strong class="stat-value" id="hub-stars-count">0 / 18</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Explorer Rank</span>
+                <strong class="stat-value stat-rank" id="hub-rank-label">Curiosity Scout</strong>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-guide-card" aria-label="How each mission works">
+            <h2>How Each Mission Works</h2>
+            <ol class="steps-list">
+              <li>
+                <span class="step-num">1</span>
+                <div>
+                  <strong>Read the Study Passage</strong>
+                  <p>Click highlighted words to open kid-friendly meanings, or tap <em>Read Aloud</em> to listen.</p>
+                </div>
+              </li>
+              <li>
+                <span class="step-num">2</span>
+                <div>
+                  <strong>Quick 3-Question Warm-Up</strong>
+                  <p>Check what you remember from the reading and earn Clue Stars before writing.</p>
+                </div>
+              </li>
+              <li>
+                <span class="step-num">3</span>
+                <div>
+                  <strong>Write 200+ Words Below</strong>
+                  <p>Use the idea checklist, power words, and grammar tips to explain your full answer.</p>
+                </div>
+              </li>
+            </ol>
+          </aside>
+        </div>
+
+        <div class="section-heading-row">
+          <div>
+            <h2>Choose Your Review Mission</h2>
+            <p>Your drafts save automatically in this browser so you can come back anytime.</p>
+          </div>
+          <div class="filter-pills" role="group" aria-label="Filter missions">
+            <button type="button" class="filter-pill is-active" data-filter="all">All Missions (6)</button>
+            <button type="button" class="filter-pill" data-filter="pending">In Progress / New</button>
+            <button type="button" class="filter-pill" data-filter="done">Completed</button>
+          </div>
+        </div>
+
+        <div id="missions-grid" class="missions-grid"></div>
+      </section>
+
+      <!-- VIEW 2: ACTIVE MISSION (Reading -> Warm-up -> 200-Word Challenge) -->
+      <section id="mission-view" class="mission-view container hidden" aria-live="polite">
+        <div class="mission-nav-bar no-print">
+          <button type="button" id="back-to-hub-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>All Missions</span>
+          </button>
+
+          <div id="mission-stepper" class="mission-stepper" role="navigation" aria-label="Switch mission"></div>
+
+          <a href="#challenge-section" class="btn btn-outline btn-sm">Jump to Questions</a>
+        </div>
+
+        <!-- Mission Banner -->
+        <article class="mission-banner" id="mission-banner"></article>
+
+        <!-- Part 1: Reading Material -->
+        <div class="reading-layout">
+          <div class="reading-card">
+            <div class="reading-toolbar">
+              <div class="reading-badge-group">
+                <span class="section-tag">Part 1 • Reading Material</span>
+                <span id="reading-time-pill" class="meta-pill">3 min read</span>
+              </div>
+              <div class="audio-controls" id="audio-controls">
+                <button type="button" id="tts-toggle-btn" class="btn btn-secondary btn-sm">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  </svg>
+                  <span id="tts-btn-label">Read Aloud</span>
+                </button>
+                <button type="button" id="tts-speed-btn" class="btn btn-ghost btn-sm" title="Switch reading speed">
+                  1.0x
+                </button>
+              </div>
+            </div>
+
+            <div class="reading-instruction">
+              Tap any <span class="vocab-sample">highlighted word</span> to see its meaning in the Word Explorer box!
+            </div>
+
+            <div id="reading-motion-stage" class="motion-stage"></div>
+
+            <div id="reading-sections" class="reading-sections"></div>
+          </div>
+
+          <!-- Sticky Side Panel: Word Explorer & Grammar Booster -->
+          <aside class="reading-sidebar">
+            <div class="sidebar-card glossary-card" id="glossary-card">
+              <div class="sidebar-card-head">
+                <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <h3>Word Explorer</h3>
+              </div>
+              <div id="glossary-active-box" class="glossary-active-box">
+                <p class="glossary-placeholder">Click any highlighted word in the reading passage to see its definition and example sentence.</p>
+              </div>
+              <div class="glossary-chip-list-label">Key Words in This Lesson:</div>
+              <div id="glossary-chips" class="glossary-chips"></div>
+            </div>
+
+            <div class="sidebar-card grammar-card" id="grammar-card"></div>
+          </aside>
+        </div>
+
+        <!-- Part 2: Quick Warm-Up Quiz -->
+        <section class="warmup-card" id="warmup-section" aria-labelledby="warmup-title">
+          <div class="warmup-head">
+            <div>
+              <span class="section-tag tag-amber">Part 2 • Quick Clue Check</span>
+              <h2 id="warmup-title">Check What You Just Read</h2>
+              <p>Answer these 3 quick warm-up questions to warm up your brain and collect Clue Stars!</p>
+            </div>
+            <div class="warmup-score-pill" id="warmup-score-pill">0 / 3 Stars</div>
+          </div>
+          <div id="warmup-questions-list" class="warmup-questions-list"></div>
+        </section>
+
+        <!-- Part 3: The Main Question / Issue (200 Words Minimum) -->
+        <section class="challenge-card" id="challenge-section" aria-labelledby="challenge-title">
+          <div class="challenge-head">
+            <span class="section-tag tag-teal">Part 3 • Your Big Answer (Minimum 200 Words)</span>
+            <h2 id="challenge-title">Solve the Challenge Below</h2>
+          </div>
+
+          <div id="prompt-callout" class="prompt-callout"></div>
+
+          <div class="writing-workspace">
+            <!-- Left / Top Writing Scaffolds -->
+            <div class="scaffolds-column">
+              <div class="scaffold-box">
+                <h3>Idea Checklist (Include These Parts)</h3>
+                <p class="scaffold-hint">Check off each idea as you explain it in your answer.</p>
+                <div id="outline-checklist" class="outline-checklist"></div>
+              </div>
+
+              <div class="scaffold-box">
+                <h3>Sentence Starters (Click to Insert)</h3>
+                <p class="scaffold-hint">Stuck starting a paragraph? Tap a starter to add it to your box.</p>
+                <div id="starter-chips" class="starter-chips"></div>
+              </div>
+
+              <div class="scaffold-box">
+                <h3>Power Words From Elfin 5</h3>
+                <p class="scaffold-hint">Words turn green automatically when you use them in your writing!</p>
+                <div id="power-words-grid" class="power-words-grid"></div>
+              </div>
+            </div>
+
+            <!-- Right / Main Writing Editor -->
+            <div class="editor-column">
+              <div class="editor-topbar">
+                <label for="essay-textarea" class="editor-label">Your Explanation / Response</label>
+                <span id="draft-save-status" class="save-status">Ready to write</span>
+              </div>
+
+              <textarea
+                id="essay-textarea"
+                class="essay-textarea"
+                rows="13"
+                placeholder="Start writing your answer here. Take your time, explain each step clearly, and use examples from the reading material above..."
+              ></textarea>
+
+              <!-- Live 200-Word Progress Meter -->
+              <div class="word-meter-box" id="word-meter-box">
+                <div class="word-meter-row">
+                  <div class="word-counter-readout">
+                    <span class="word-num" id="live-word-count">0</span>
+                    <span class="word-target">/ 200 words minimum</span>
+                  </div>
+                  <div class="word-stats-extra">
+                    <span id="live-sentence-count">0 sentences</span>
+                    <span aria-hidden="true">•</span>
+                    <span id="live-power-count">0 power words used</span>
+                  </div>
+                </div>
+                <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="200" aria-valuenow="0" id="word-progress-track">
+                  <div class="progress-fill" id="word-progress-fill"></div>
+                </div>
+                <p class="word-meter-message" id="word-meter-message">
+                  Write at least 200 words to explain your thinking clearly and unlock Submit.
+                </p>
+              </div>
+
+              <div class="editor-actions">
+                <button type="button" id="clear-draft-btn" class="btn btn-ghost btn-sm">Clear Draft</button>
+                <button type="button" id="submit-answer-btn" class="btn btn-primary" disabled>
+                  Write 200 more words to submit
+                </button>
+              </div>
+
+              <!-- Submission Feedback Box -->
+              <div id="submission-feedback" class="submission-feedback hidden" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <div class="mission-footer-nav no-print">
+            <button type="button" id="prev-mission-btn" class="btn btn-secondary">Previous Mission</button>
+            <button type="button" id="next-mission-btn" class="btn btn-secondary">Next Mission</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- VIEW 3: REPORT / EXPORT VIEW -->
+      <section id="report-view" class="report-view container hidden">
+        <div class="report-toolbar no-print">
+          <button type="button" id="report-back-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Back to Missions</span>
+          </button>
+
+          <div class="report-export-actions">
+            <button type="button" id="copy-report-btn" class="btn btn-secondary btn-sm">Copy All Answers</button>
+            <button type="button" id="download-report-btn" class="btn btn-secondary btn-sm">Download .TXT</button>
+            <button type="button" id="print-report-btn" class="btn btn-primary btn-sm">Print / Save PDF</button>
+          </div>
+        </div>
+
+        <div id="report-sheet" class="report-sheet"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Confirm Clear Draft Modal -->
+  <div id="confirm-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="modal-card">
+      <h3 id="confirm-modal-title">Clear your current draft?</h3>
+      <p>This will erase what you typed for this mission so you can start fresh.</p>
+      <div class="modal-actions">
+        <button type="button" id="confirm-cancel-btn" class="btn btn-secondary">Keep My Writing</button>
+        <button type="button" id="confirm-proceed-btn" class="btn btn-danger">Yes, Clear Draft</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="motion.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
