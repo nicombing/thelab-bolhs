@@ -53,6 +53,14 @@
             <span>My Report</span>
           </button>
         </div>
+
+        <button type="button" id="topbar-admin-btn" class="admin-mini-btn no-print" title="Teacher / Admin Dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Admin</span>
+        </button>
       </div>
     </header>
 
@@ -100,6 +108,13 @@
 
           <div class="welcome-roster-note">
             <span>15 Students Enrolled • Auto-saves your writing on this device</span>
+            <button type="button" id="welcome-admin-btn" class="admin-mini-link" title="Unlock Teacher Admin Dashboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>Admin</span>
+            </button>
           </div>
         </div>
       </section>
@@ -369,6 +384,81 @@
 
         <div id="report-sheet" class="report-sheet"></div>
       </section>
+
+      <!-- VIEW 4: PASSWORD-PROTECTED TEACHER ADMIN DASHBOARD -->
+      <section id="admin-view" class="admin-view container hidden">
+        <div class="admin-topbar no-print">
+          <div class="admin-title-group">
+            <span class="section-tag tag-teal">Teacher Admin Dashboard</span>
+            <h1>Grade 5 Class Submissions &amp; Progress</h1>
+            <p>Inspect saved answers, drafts, word counts, and Clue Stars across all 15 enrolled students.</p>
+          </div>
+          <div class="admin-actions">
+            <button type="button" id="admin-export-csv-btn" class="btn btn-secondary btn-sm">Export CSV</button>
+            <button type="button" id="admin-export-json-btn" class="btn btn-secondary btn-sm">Backup .JSON</button>
+            <label for="admin-import-json-input" class="btn btn-secondary btn-sm" style="cursor: pointer;">
+              Import .JSON
+              <input type="file" id="admin-import-json-input" accept=".json,application/json" class="sr-only">
+            </label>
+            <button type="button" id="admin-print-btn" class="btn btn-primary btn-sm">Print Class Report</button>
+            <button type="button" id="admin-logout-btn" class="btn btn-ghost btn-sm">Lock &amp; Exit Admin</button>
+          </div>
+        </div>
+
+        <!-- Class Summary KPI Cards -->
+        <div id="admin-kpi-grid" class="hero-stats-grid admin-kpi-grid"></div>
+
+        <!-- Filters -->
+        <div class="admin-filters-bar no-print">
+          <div class="admin-filter-item">
+            <label for="admin-student-filter">Filter Student</label>
+            <select id="admin-student-filter" class="admin-select">
+              <option value="all">All 15 Students</option>
+            </select>
+          </div>
+          <div class="admin-filter-item">
+            <label for="admin-mission-filter">Filter Mission</label>
+            <select id="admin-mission-filter" class="admin-select">
+              <option value="all">All 6 Missions</option>
+            </select>
+          </div>
+          <div class="admin-filter-item">
+            <label for="admin-status-filter">Filter Activity</label>
+            <select id="admin-status-filter" class="admin-select">
+              <option value="all">Show All Students (15)</option>
+              <option value="active">Students With Saved Writing / Stars</option>
+              <option value="completed">Students With Completed Missions</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Class Summary Table -->
+        <div class="admin-table-card">
+          <h2>Class Roster Summary (15 Students)</h2>
+          <div class="admin-table-wrap">
+            <table class="admin-roster-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Student Name</th>
+                  <th>Completed Missions</th>
+                  <th>Drafts in Progress</th>
+                  <th>Total Words</th>
+                  <th>Clue Stars</th>
+                  <th class="no-print">Action</th>
+                </tr>
+              </thead>
+              <tbody id="admin-roster-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Detailed Student Submissions -->
+        <div class="admin-submissions-section">
+          <h2>Detailed Student Answers</h2>
+          <div id="admin-submissions-list" class="admin-submissions-list"></div>
+        </div>
+      </section>
     </main>
   </div>
 
@@ -381,6 +471,42 @@
         <button type="button" id="confirm-cancel-btn" class="btn btn-secondary">Keep My Writing</button>
         <button type="button" id="confirm-proceed-btn" class="btn btn-danger">Yes, Clear Draft</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Admin Password Modal -->
+  <div id="admin-login-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <div class="modal-card">
+      <div class="admin-modal-head">
+        <span class="admin-lock-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <div>
+          <h3 id="admin-modal-title">Teacher Admin Access</h3>
+          <p style="margin-bottom: 0;">Enter the admin password to view all Grade 5 student answers.</p>
+        </div>
+      </div>
+
+      <form id="admin-login-form" class="admin-login-form">
+        <label for="admin-password-input" class="sr-only">Admin Password</label>
+        <input
+          type="password"
+          id="admin-password-input"
+          class="admin-password-input"
+          placeholder="Enter password..."
+          autocomplete="current-password"
+        >
+        <p id="admin-login-error" class="admin-login-error hidden" role="alert">
+          Incorrect password. Please try again.
+        </p>
+        <div class="modal-actions">
+          <button type="button" id="admin-modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" id="admin-modal-submit-btn" class="btn btn-primary">Unlock Dashboard</button>
+        </div>
+      </form>
     </div>
   </div>
 

@@ -3,6 +3,7 @@
 
   const STORAGE_KEY = "elfin5_explorer_journal_v1";
   const MIN_WORDS = 100;
+  const ADMIN_PASSWORD = "qw3rty";
   const MISSIONS = window.MISSIONS_DATA || [];
   const CLASS_STUDENTS = [
     "Ariella",
@@ -28,12 +29,14 @@
   let speechRate = 1.0;
   let isSpeaking = false;
   let speechQueueToken = 0;
+  let isAdminUnlocked = false;
 
   // DOM References
   const welcomeView = document.getElementById("welcome-view");
   const hubView = document.getElementById("hub-view");
   const missionView = document.getElementById("mission-view");
   const reportView = document.getElementById("report-view");
+  const adminView = document.getElementById("admin-view");
 
   const brandHomeBtn = document.getElementById("brand-home-btn");
   const topbarStatus = document.getElementById("topbar-status");
@@ -101,6 +104,26 @@
   const confirmModal = document.getElementById("confirm-modal");
   const confirmCancelBtn = document.getElementById("confirm-cancel-btn");
   const confirmProceedBtn = document.getElementById("confirm-proceed-btn");
+
+  const topbarAdminBtn = document.getElementById("topbar-admin-btn");
+  const welcomeAdminBtn = document.getElementById("welcome-admin-btn");
+  const adminLoginModal = document.getElementById("admin-login-modal");
+  const adminLoginForm = document.getElementById("admin-login-form");
+  const adminPasswordInput = document.getElementById("admin-password-input");
+  const adminLoginError = document.getElementById("admin-login-error");
+  const adminModalCancelBtn = document.getElementById("admin-modal-cancel-btn");
+
+  const adminKpiGrid = document.getElementById("admin-kpi-grid");
+  const adminStudentFilter = document.getElementById("admin-student-filter");
+  const adminMissionFilter = document.getElementById("admin-mission-filter");
+  const adminStatusFilter = document.getElementById("admin-status-filter");
+  const adminRosterTbody = document.getElementById("admin-roster-tbody");
+  const adminSubmissionsList = document.getElementById("admin-submissions-list");
+  const adminExportCsvBtn = document.getElementById("admin-export-csv-btn");
+  const adminExportJsonBtn = document.getElementById("admin-export-json-btn");
+  const adminImportJsonInput = document.getElementById("admin-import-json-input");
+  const adminPrintBtn = document.getElementById("admin-print-btn");
+  const adminLogoutBtn = document.getElementById("admin-logout-btn");
 
   // ---------- Utilities ----------
 
@@ -196,18 +219,31 @@
   }
 
   function getStatsForStudent(name) {
-    const missionsMap = (state.profiles && state.profiles[name]) || createEmptyMissionsMap();
+    const missionsMap =
+      state.studentName === name
+        ? state.missions
+        : (state.profiles && state.profiles[name]) || createEmptyMissionsMap();
     let completed = 0;
+    let drafts = 0;
     let totalWords = 0;
+    let totalStars = 0;
     MISSIONS.forEach((m) => {
       const ms = missionsMap[m.id] || defaultMissionState();
-      const text = ms.submittedText || ms.draft || "";
-      totalWords += countWords(text);
+      const text = (ms.submittedText || ms.draft || "").trim();
+      const words = countWords(text);
+      totalWords += words;
       if (ms.submittedText && countWords(ms.submittedText) >= MIN_WORDS) {
         completed += 1;
+      } else if (words > 0) {
+        drafts += 1;
       }
+      m.warmup.forEach((q, idx) => {
+        if (ms.warmupAnswers && ms.warmupAnswers[idx] === q.correctIndex) {
+          totalStars += 1;
+        }
+      });
     });
-    return { completed, totalWords };
+    return { completed, drafts, totalWords, totalStars, missionsMap };
   }
 
   function escapeHtml(str) {
@@ -356,10 +392,11 @@
   function showView(viewName) {
     stopSpeech();
     if (welcomeView) welcomeView.classList.toggle("hidden", viewName !== "welcome");
-    if (topbarStatus) topbarStatus.classList.toggle("hidden", viewName === "welcome");
+    if (topbarStatus) topbarStatus.classList.toggle("hidden", viewName === "welcome" || viewName === "admin");
     hubView.classList.toggle("hidden", viewName !== "hub");
     missionView.classList.toggle("hidden", viewName !== "mission");
     reportView.classList.toggle("hidden", viewName !== "report");
+    if (adminView) adminView.classList.toggle("hidden", viewName !== "admin");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -928,6 +965,303 @@
     `;
   }
 
+  // ---------- Admin Dashboard ----------
+
+  function openAdminModal() {
+    if (isAdminUnlocked) {
+      openAdminDashboard();
+      return;
+    }
+    adminPasswordInput.value = "";
+    adminLoginError.classList.add("hidden");
+    adminLoginModal.classList.remove("hidden");
+    setTimeout(() => adminPasswordInput.focus(), 40);
+  }
+
+  function closeAdminModal() {
+    adminLoginModal.classList.add("hidden");
+    adminPasswordInput.value = "";
+    adminLoginError.classList.add("hidden");
+  }
+
+  function populateAdminFilterDropdowns() {
+    if (adminStudentFilter && adminStudentFilter.options.length <= 1) {
+      adminStudentFilter.innerHTML =
+        `<option value="all">All 15 Students</option>` +
+        CLASS_STUDENTS.map((name, idx) => `<option value="${escapeHtml(name)}">${idx + 1}. ${escapeHtml(name)}</option>`).join("");
+    }
+    if (adminMissionFilter && adminMissionFilter.options.length <= 1) {
+      adminMissionFilter.innerHTML =
+        `<option value="all">All 6 Missions</option>` +
+        MISSIONS.map((m) => `<option value="${escapeHtml(m.id)}">Mission ${m.number}: ${escapeHtml(m.title)}</option>`).join("");
+    }
+  }
+
+  function openAdminDashboard() {
+    saveState();
+    populateAdminFilterDropdowns();
+    renderAdminDashboard();
+    showView("admin");
+  }
+
+  function renderAdminDashboard() {
+    if (!adminView) return;
+
+    let activeStudentsCount = 0;
+    let classCompletedMissions = 0;
+    let classTotalWords = 0;
+    let classTotalStars = 0;
+    const maxStarsPerStudent = MISSIONS.reduce((acc, m) => acc + m.warmup.length, 0);
+
+    const studentRowsData = CLASS_STUDENTS.map((name, idx) => {
+      const st = getStatsForStudent(name);
+      if (st.completed > 0 || st.drafts > 0 || st.totalStars > 0) {
+        activeStudentsCount += 1;
+      }
+      classCompletedMissions += st.completed;
+      classTotalWords += st.totalWords;
+      classTotalStars += st.totalStars;
+      return {
+        index: idx + 1,
+        name,
+        ...st
+      };
+    });
+
+    adminKpiGrid.innerHTML = `
+      <div class="stat-box">
+        <span class="stat-label">Active Students</span>
+        <strong class="stat-value">${activeStudentsCount} / ${CLASS_STUDENTS.length}</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Missions Completed</span>
+        <strong class="stat-value">${classCompletedMissions} / ${CLASS_STUDENTS.length * MISSIONS.length}</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Class Words Written</span>
+        <strong class="stat-value">${classTotalWords.toLocaleString()}</strong>
+      </div>
+      <div class="stat-box">
+        <span class="stat-label">Class Clue Stars</span>
+        <strong class="stat-value">${classTotalStars} / ${CLASS_STUDENTS.length * maxStarsPerStudent}</strong>
+      </div>
+    `;
+
+    // Roster Table
+    adminRosterTbody.innerHTML = studentRowsData
+      .map((row) => {
+        const badgeClass =
+          row.completed === MISSIONS.length
+            ? "status-done"
+            : row.completed > 0 || row.drafts > 0
+              ? "status-draft"
+              : "status-new";
+        return `
+          <tr>
+            <td class="mono-cell">${row.index}</td>
+            <td><strong>${escapeHtml(row.name)}</strong></td>
+            <td><span class="status-badge ${badgeClass}">${row.completed} / ${MISSIONS.length}</span></td>
+            <td class="mono-cell">${row.drafts}</td>
+            <td class="mono-cell">${row.totalWords.toLocaleString()} words</td>
+            <td class="mono-cell">${row.totalStars} / ${maxStarsPerStudent}</td>
+            <td class="no-print">
+              <button type="button" class="btn btn-secondary btn-sm admin-focus-student-btn" data-student="${escapeHtml(row.name)}">
+                View Answers
+              </button>
+            </td>
+          </tr>
+        `;
+      })
+      .join("");
+
+    adminRosterTbody.querySelectorAll(".admin-focus-student-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        adminStudentFilter.value = btn.dataset.student;
+        renderAdminDashboard();
+        adminSubmissionsList.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+
+    // Detailed Submissions Filtered
+    const selectedStudent = adminStudentFilter ? adminStudentFilter.value : "all";
+    const selectedMission = adminMissionFilter ? adminMissionFilter.value : "all";
+    const selectedStatus = adminStatusFilter ? adminStatusFilter.value : "all";
+
+    const filteredStudents = studentRowsData.filter((row) => {
+      if (selectedStudent !== "all" && row.name !== selectedStudent) return false;
+      if (selectedStatus === "active" && row.completed === 0 && row.drafts === 0 && row.totalStars === 0) return false;
+      if (selectedStatus === "completed" && row.completed === 0) return false;
+      return true;
+    });
+
+    if (filteredStudents.length === 0) {
+      adminSubmissionsList.innerHTML = `
+        <div class="mission-card" style="text-align: center; padding: 32px;">
+          <h3>No student records match the current filter</h3>
+          <p class="mission-card-desc">Switch the filters above back to "All 15 Students" to view everyone.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const missionsToShow = MISSIONS.filter((m) => selectedMission === "all" || m.id === selectedMission);
+
+    adminSubmissionsList.innerHTML = filteredStudents
+      .map((row) => {
+        const missionCardsHtml = missionsToShow
+          .map((m) => {
+            const ms = row.missionsMap[m.id] || defaultMissionState();
+            const text = (ms.submittedText || ms.draft || "").trim();
+            const words = countWords(text);
+            const done = Boolean(ms.submittedText && words >= MIN_WORDS);
+            const usedPower = getUsedPowerWords(text, m.powerWords);
+            let stars = 0;
+            m.warmup.forEach((q, qIdx) => {
+              if (ms.warmupAnswers && ms.warmupAnswers[qIdx] === q.correctIndex) stars += 1;
+            });
+
+            const statusBadge = done
+              ? `<span class="status-badge status-done">Completed (${words} words)</span>`
+              : words > 0
+                ? `<span class="status-badge status-draft">Draft (${words} / ${MIN_WORDS} words)</span>`
+                : `<span class="status-badge status-new">Not Started</span>`;
+
+            const timeNote = ms.submittedAt
+              ? `Submitted: ${new Date(ms.submittedAt).toLocaleString()}`
+              : words > 0
+                ? "Draft saved (not yet submitted)"
+                : "No writing saved yet";
+
+            return `
+              <div class="admin-mission-answer-box">
+                <div class="admin-mission-head">
+                  <div>
+                    <span class="mission-unit-tag">Mission ${m.number} • ${escapeHtml(m.unitsLabel)}</span>
+                    <h4>${escapeHtml(m.title)}</h4>
+                  </div>
+                  ${statusBadge}
+                </div>
+                <div class="admin-mission-meta">
+                  <span>${escapeHtml(timeNote)}</span>
+                  <span>•</span>
+                  <span>Clue Stars: ${stars}/${m.warmup.length}</span>
+                  <span>•</span>
+                  <span>Power Words: ${usedPower.length}/${m.powerWords.length}</span>
+                </div>
+                ${
+                  text
+                    ? `<div class="admin-answer-body">${escapeHtml(text)}</div>`
+                    : `<p class="report-empty-note">No answer written yet.</p>`
+                }
+              </div>
+            `;
+          })
+          .join("");
+
+        return `
+          <article class="admin-student-card">
+            <div class="admin-student-card-head">
+              <div>
+                <span class="mission-unit-tag">Student #${row.index} • Grade 5</span>
+                <h3>${escapeHtml(row.name)}</h3>
+              </div>
+              <div class="progress-pill">
+                <span class="pill-dot" aria-hidden="true"></span>
+                <span>${row.completed} / ${MISSIONS.length} Completed • ${row.totalWords} Words</span>
+              </div>
+            </div>
+            <div class="admin-student-missions-grid">
+              ${missionCardsHtml}
+            </div>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
+  function exportClassCsv() {
+    saveState();
+    const headers = [
+      "Student Number",
+      "Student Name",
+      "Mission Number",
+      "Mission Title",
+      "Status",
+      "Word Count",
+      "Clue Stars",
+      "Power Words Used",
+      "Submitted At",
+      "Answer Text"
+    ];
+
+    const escapeCsv = (val) => {
+      const s = String(val ?? "").replace(/"/g, '""');
+      return `"${s}"`;
+    };
+
+    const rows = [headers.map(escapeCsv).join(",")];
+    CLASS_STUDENTS.forEach((name, idx) => {
+      const st = getStatsForStudent(name);
+      MISSIONS.forEach((m) => {
+        const ms = st.missionsMap[m.id] || defaultMissionState();
+        const text = (ms.submittedText || ms.draft || "").trim();
+        const words = countWords(text);
+        const done = Boolean(ms.submittedText && words >= MIN_WORDS);
+        const status = done ? "Completed" : words > 0 ? "Draft" : "Not Started";
+        const usedPower = getUsedPowerWords(text, m.powerWords);
+        let stars = 0;
+        m.warmup.forEach((q, qIdx) => {
+          if (ms.warmupAnswers && ms.warmupAnswers[qIdx] === q.correctIndex) stars += 1;
+        });
+
+        rows.push(
+          [
+            idx + 1,
+            name,
+            m.number,
+            m.title,
+            status,
+            words,
+            `${stars}/${m.warmup.length}`,
+            usedPower.join("; "),
+            ms.submittedAt || "",
+            text
+          ]
+            .map(escapeCsv)
+            .join(",")
+        );
+      });
+    });
+
+    const blob = new Blob([rows.join("\r\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "thelab-bolhs-grade5-answers.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  function exportClassJson() {
+    saveState();
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      project: "thelab-bolhs",
+      profiles: state.profiles
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "thelab-bolhs-grade5-backup.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   // ---------- Event Wiring ----------
 
   function init() {
@@ -1130,6 +1464,96 @@
     printReportBtn.addEventListener("click", () => {
       window.print();
     });
+
+    // Admin Modal & Dashboard Events
+    if (topbarAdminBtn) {
+      topbarAdminBtn.addEventListener("click", openAdminModal);
+    }
+    if (welcomeAdminBtn) {
+      welcomeAdminBtn.addEventListener("click", openAdminModal);
+    }
+    if (adminModalCancelBtn) {
+      adminModalCancelBtn.addEventListener("click", closeAdminModal);
+    }
+    if (adminLoginModal) {
+      adminLoginModal.addEventListener("click", (e) => {
+        if (e.target === adminLoginModal) closeAdminModal();
+      });
+    }
+    if (adminLoginForm) {
+      adminLoginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (adminPasswordInput.value === ADMIN_PASSWORD) {
+          isAdminUnlocked = true;
+          closeAdminModal();
+          openAdminDashboard();
+        } else {
+          adminLoginError.classList.remove("hidden");
+          adminPasswordInput.select();
+        }
+      });
+    }
+    if (adminStudentFilter) {
+      adminStudentFilter.addEventListener("change", renderAdminDashboard);
+    }
+    if (adminMissionFilter) {
+      adminMissionFilter.addEventListener("change", renderAdminDashboard);
+    }
+    if (adminStatusFilter) {
+      adminStatusFilter.addEventListener("change", renderAdminDashboard);
+    }
+    if (adminExportCsvBtn) {
+      adminExportCsvBtn.addEventListener("click", exportClassCsv);
+    }
+    if (adminExportJsonBtn) {
+      adminExportJsonBtn.addEventListener("click", exportClassJson);
+    }
+    if (adminImportJsonInput) {
+      adminImportJsonInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(String(reader.result || "{}"));
+            const incomingProfiles = parsed.profiles || parsed;
+            if (incomingProfiles && typeof incomingProfiles === "object") {
+              Object.keys(incomingProfiles).forEach((name) => {
+                if (CLASS_STUDENTS.includes(name)) {
+                  state.profiles[name] = normalizeMissionsMap(incomingProfiles[name]);
+                }
+              });
+              if (state.studentName && state.profiles[state.studentName]) {
+                state.missions = normalizeMissionsMap(state.profiles[state.studentName]);
+              }
+              saveState();
+              renderAdminDashboard();
+            }
+          } catch (_) {
+            // Ignore malformed JSON file
+          }
+          adminImportJsonInput.value = "";
+        };
+        reader.readAsText(file);
+      });
+    }
+    if (adminPrintBtn) {
+      adminPrintBtn.addEventListener("click", () => {
+        window.print();
+      });
+    }
+    if (adminLogoutBtn) {
+      adminLogoutBtn.addEventListener("click", () => {
+        isAdminUnlocked = false;
+        if (state.studentName && CLASS_STUDENTS.includes(state.studentName)) {
+          showView("hub");
+          renderHub();
+        } else {
+          renderWelcome();
+          showView("welcome");
+        }
+      });
+    }
 
     window.addEventListener("beforeunload", stopSpeech);
 
