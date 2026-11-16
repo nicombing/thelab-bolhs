@@ -1773,6 +1773,20 @@ textarea {
   flex-wrap: wrap;
 }
 
+.admin-refresh-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 11px;
+  border-radius: 999px;
+  background: var(--bg-tint-teal);
+  border: 1px solid #99f6e4;
+  color: var(--accent-teal);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .admin-kpi-grid {
   margin-bottom: 22px;
 }

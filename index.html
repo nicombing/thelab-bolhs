@@ -394,6 +394,11 @@
             <p>Inspect saved answers, drafts, word counts, and Clue Stars across all 15 enrolled students.</p>
           </div>
           <div class="admin-actions">
+            <span id="admin-refresh-status" class="admin-refresh-status" aria-live="polite">
+              <span class="motion-live-dot" aria-hidden="true"></span>
+              <span>Auto-refresh: 5s</span>
+            </span>
+            <button type="button" id="admin-refresh-btn" class="btn btn-secondary btn-sm">Refresh Now</button>
             <button type="button" id="admin-export-csv-btn" class="btn btn-secondary btn-sm">Export CSV</button>
             <button type="button" id="admin-export-json-btn" class="btn btn-secondary btn-sm">Backup .JSON</button>
             <label for="admin-import-json-input" class="btn btn-secondary btn-sm" style="cursor: pointer;">

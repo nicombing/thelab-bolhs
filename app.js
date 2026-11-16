@@ -30,6 +30,7 @@
   let isSpeaking = false;
   let speechQueueToken = 0;
   let isAdminUnlocked = false;
+  let adminRefreshTimer = null;
 
   // DOM References
   const welcomeView = document.getElementById("welcome-view");
@@ -124,6 +125,8 @@
   const adminImportJsonInput = document.getElementById("admin-import-json-input");
   const adminPrintBtn = document.getElementById("admin-print-btn");
   const adminLogoutBtn = document.getElementById("admin-logout-btn");
+  const adminRefreshBtn = document.getElementById("admin-refresh-btn");
+  const adminRefreshStatus = document.getElementById("admin-refresh-status");
 
   // ---------- Utilities ----------
 
@@ -391,6 +394,9 @@
 
   function showView(viewName) {
     stopSpeech();
+    if (viewName !== "admin") {
+      stopAdminAutoRefresh();
+    }
     if (welcomeView) welcomeView.classList.toggle("hidden", viewName !== "welcome");
     if (topbarStatus) topbarStatus.classList.toggle("hidden", viewName === "welcome" || viewName === "admin");
     hubView.classList.toggle("hidden", viewName !== "hub");
@@ -724,7 +730,10 @@
     }).join("");
 
     missionStepper.querySelectorAll(".stepper-btn").forEach((btn) => {
-      btn.addEventListener("click", () => openMission(btn.dataset.missionId));
+      btn.addEventListener("click", () => {
+        saveActiveMissionProgress();
+        openMission(btn.dataset.missionId);
+      });
     });
 
     // Banner
@@ -865,11 +874,29 @@
     prevMissionBtn.disabled = missionIdx === 0;
     nextMissionBtn.disabled = missionIdx === MISSIONS.length - 1;
     prevMissionBtn.onclick = () => {
+      saveActiveMissionProgress();
       if (missionIdx > 0) openMission(MISSIONS[missionIdx - 1].id);
     };
     nextMissionBtn.onclick = () => {
+      saveActiveMissionProgress();
       if (missionIdx < MISSIONS.length - 1) openMission(MISSIONS[missionIdx + 1].id);
     };
+  }
+
+  function saveActiveMissionProgress() {
+    if (!currentMissionId || !essayTextarea) return;
+    const ms = state.missions[currentMissionId];
+    if (!ms) return;
+    const raw = essayTextarea.value;
+    const trimmed = raw.trim();
+    ms.draft = raw;
+    if (countWords(trimmed) >= MIN_WORDS) {
+      if (ms.submittedText !== trimmed) {
+        ms.submittedText = trimmed;
+        ms.submittedAt = new Date().toISOString();
+      }
+    }
+    saveState();
   }
 
   // ---------- Render Report View ----------
@@ -997,11 +1024,49 @@
     }
   }
 
+  function stopAdminAutoRefresh() {
+    if (adminRefreshTimer) {
+      clearInterval(adminRefreshTimer);
+      adminRefreshTimer = null;
+    }
+  }
+
+  function updateAdminRefreshTimestamp() {
+    if (!adminRefreshStatus) return;
+    const nowLabel = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit"
+    });
+    adminRefreshStatus.innerHTML = `
+      <span class="motion-live-dot" aria-hidden="true"></span>
+      <span>Auto-refresh: 5s • Updated ${escapeHtml(nowLabel)}</span>
+    `;
+  }
+
+  function refreshAdminFromStorage() {
+    if (!isAdminUnlocked || !adminView || adminView.classList.contains("hidden")) return;
+    const fresh = loadState();
+    state.profiles = fresh.profiles;
+    if (state.studentName && state.profiles[state.studentName]) {
+      state.missions = normalizeMissionsMap(state.profiles[state.studentName]);
+    }
+    renderAdminDashboard();
+    updateAdminRefreshTimestamp();
+  }
+
+  function startAdminAutoRefresh() {
+    stopAdminAutoRefresh();
+    updateAdminRefreshTimestamp();
+    adminRefreshTimer = setInterval(refreshAdminFromStorage, 5000);
+  }
+
   function openAdminDashboard() {
     saveState();
     populateAdminFilterDropdowns();
     renderAdminDashboard();
     showView("admin");
+    startAdminAutoRefresh();
   }
 
   function renderAdminDashboard() {
@@ -1542,9 +1607,13 @@
         window.print();
       });
     }
+    if (adminRefreshBtn) {
+      adminRefreshBtn.addEventListener("click", refreshAdminFromStorage);
+    }
     if (adminLogoutBtn) {
       adminLogoutBtn.addEventListener("click", () => {
         isAdminUnlocked = false;
+        stopAdminAutoRefresh();
         if (state.studentName && CLASS_STUDENTS.includes(state.studentName)) {
           showView("hub");
           renderHub();
@@ -1555,7 +1624,16 @@
       });
     }
 
-    window.addEventListener("beforeunload", stopSpeech);
+    window.addEventListener("storage", (e) => {
+      if (e.key === STORAGE_KEY) {
+        refreshAdminFromStorage();
+      }
+    });
+
+    window.addEventListener("beforeunload", () => {
+      stopSpeech();
+      stopAdminAutoRefresh();
+    });
 
     renderWelcome();
     showView("welcome");
