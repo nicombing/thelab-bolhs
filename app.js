@@ -4,6 +4,23 @@
   const STORAGE_KEY = "elfin5_explorer_journal_v1";
   const MIN_WORDS = 100;
   const MISSIONS = window.MISSIONS_DATA || [];
+  const CLASS_STUDENTS = [
+    "Ariella",
+    "Mclayreen",
+    "Oscar",
+    "Kenzi",
+    "Josephine",
+    "Andryan",
+    "Gabriel",
+    "Galvan",
+    "Yael",
+    "Angelica",
+    "Sophie",
+    "Nehemiah",
+    "Ansell",
+    "Chloe",
+    "Brienna"
+  ];
 
   let state = loadState();
   let currentMissionId = null;
@@ -13,16 +30,23 @@
   let speechQueueToken = 0;
 
   // DOM References
+  const welcomeView = document.getElementById("welcome-view");
   const hubView = document.getElementById("hub-view");
   const missionView = document.getElementById("mission-view");
   const reportView = document.getElementById("report-view");
 
   const brandHomeBtn = document.getElementById("brand-home-btn");
-  const studentNameInput = document.getElementById("student-name-input");
-  const studentClassInput = document.getElementById("student-class-input");
+  const topbarStatus = document.getElementById("topbar-status");
+  const activeStudentBadge = document.getElementById("active-student-badge");
+  const switchStudentBtn = document.getElementById("switch-student-btn");
   const overallProgressText = document.getElementById("overall-progress-text");
   const openReportBtn = document.getElementById("open-report-btn");
 
+  const welcomeStudentSelect = document.getElementById("welcome-student-select");
+  const welcomeStudentPreview = document.getElementById("welcome-student-preview");
+  const startSeriesBtn = document.getElementById("start-series-btn");
+
+  const hubGreetingTitle = document.getElementById("hub-greeting-title");
   const hubCompletedCount = document.getElementById("hub-completed-count");
   const hubTotalWords = document.getElementById("hub-total-words");
   const hubStarsCount = document.getElementById("hub-stars-count");
@@ -90,12 +114,33 @@
     };
   }
 
+  function createEmptyMissionsMap() {
+    const map = {};
+    MISSIONS.forEach((m) => {
+      map[m.id] = defaultMissionState();
+    });
+    return map;
+  }
+
+  function normalizeMissionsMap(rawMissions) {
+    const map = createEmptyMissionsMap();
+    if (rawMissions && typeof rawMissions === "object") {
+      MISSIONS.forEach((m) => {
+        if (rawMissions[m.id] && typeof rawMissions[m.id] === "object") {
+          map[m.id] = Object.assign(defaultMissionState(), rawMissions[m.id]);
+        }
+      });
+    }
+    return map;
+  }
+
   function loadState() {
     const base = {
       studentName: "",
-      studentClass: "",
+      studentClass: "Grade 5",
       activeFilter: "all",
-      missions: {}
+      missions: createEmptyMissionsMap(),
+      profiles: {}
     };
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -103,32 +148,66 @@
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === "object") {
           base.studentName = typeof parsed.studentName === "string" ? parsed.studentName : "";
-          base.studentClass = typeof parsed.studentClass === "string" ? parsed.studentClass : "";
+          base.studentClass = typeof parsed.studentClass === "string" && parsed.studentClass ? parsed.studentClass : "Grade 5";
           base.activeFilter = ["all", "pending", "done"].includes(parsed.activeFilter) ? parsed.activeFilter : "all";
-          if (parsed.missions && typeof parsed.missions === "object") {
-            base.missions = parsed.missions;
+          if (parsed.profiles && typeof parsed.profiles === "object") {
+            Object.keys(parsed.profiles).forEach((name) => {
+              base.profiles[name] = normalizeMissionsMap(parsed.profiles[name]);
+            });
+          }
+          if (base.studentName && base.profiles[base.studentName]) {
+            base.missions = normalizeMissionsMap(base.profiles[base.studentName]);
+          } else if (parsed.missions && typeof parsed.missions === "object") {
+            base.missions = normalizeMissionsMap(parsed.missions);
+            if (base.studentName) {
+              base.profiles[base.studentName] = base.missions;
+            }
           }
         }
       }
     } catch (_) {
       // Ignore storage read errors (e.g. private mode restrictions)
     }
-    MISSIONS.forEach((m) => {
-      if (!base.missions[m.id]) {
-        base.missions[m.id] = defaultMissionState();
-      } else {
-        base.missions[m.id] = Object.assign(defaultMissionState(), base.missions[m.id]);
-      }
-    });
     return base;
   }
 
   function saveState() {
     try {
+      if (state.studentName) {
+        state.profiles[state.studentName] = state.missions;
+      }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (_) {
       // Ignore storage quota errors
     }
+  }
+
+  function selectStudentProfile(name) {
+    if (state.studentName) {
+      state.profiles[state.studentName] = state.missions;
+    }
+    state.studentName = name;
+    state.studentClass = "Grade 5";
+    if (!state.profiles[name]) {
+      state.profiles[name] = createEmptyMissionsMap();
+    }
+    state.missions = normalizeMissionsMap(state.profiles[name]);
+    saveState();
+  }
+
+  function getStatsForStudent(name) {
+    const missionsMap = (state.profiles && state.profiles[name]) || createEmptyMissionsMap();
+    let completed = 0;
+    let totalWords = 0;
+    MISSIONS.forEach((m) => {
+      const ms = missionsMap[m.id] || defaultMissionState();
+      const text = ms.submittedText || ms.draft || "";
+      totalWords += countWords(text);
+      if (ms.submittedText && countWords(ms.submittedText) >= MIN_WORDS) {
+        completed += 1;
+      }
+    });
+    return { completed, totalWords };
   }
 
   function escapeHtml(str) {
@@ -276,16 +355,62 @@
 
   function showView(viewName) {
     stopSpeech();
+    if (welcomeView) welcomeView.classList.toggle("hidden", viewName !== "welcome");
+    if (topbarStatus) topbarStatus.classList.toggle("hidden", viewName === "welcome");
     hubView.classList.toggle("hidden", viewName !== "hub");
     missionView.classList.toggle("hidden", viewName !== "mission");
     reportView.classList.toggle("hidden", viewName !== "report");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  function renderWelcome() {
+    if (!welcomeStudentSelect) return;
+    welcomeStudentSelect.innerHTML =
+      `<option value="">-- Select Your Name --</option>` +
+      CLASS_STUDENTS.map((name, i) => {
+        const selected = state.studentName === name ? "selected" : "";
+        return `<option value="${escapeHtml(name)}" ${selected}>${i + 1}. ${escapeHtml(name)}</option>`;
+      }).join("");
+
+    updateWelcomePreview();
+  }
+
+  function updateWelcomePreview() {
+    const picked = welcomeStudentSelect ? welcomeStudentSelect.value : "";
+    if (!picked) {
+      startSeriesBtn.disabled = true;
+      startSeriesBtn.querySelector("span").textContent = "Pick Your Name to Start the Series";
+      welcomeStudentPreview.classList.add("hidden");
+      welcomeStudentPreview.innerHTML = "";
+      return;
+    }
+
+    const st = getStatsForStudent(picked);
+    startSeriesBtn.disabled = false;
+    startSeriesBtn.querySelector("span").textContent =
+      st.completed > 0 || st.totalWords > 0
+        ? `Continue Series as ${picked}`
+        : `Start the Series as ${picked}`;
+
+    welcomeStudentPreview.classList.remove("hidden");
+    welcomeStudentPreview.innerHTML = `
+      <strong>Explorer: ${escapeHtml(picked)} (Grade 5)</strong>
+      <span>Saved progress on this device: <strong>${st.completed} / ${MISSIONS.length} missions completed</strong> • <strong>${st.totalWords} words written</strong></span>
+    `;
+  }
+
   // ---------- Render Hub ----------
 
   function renderGlobalStats() {
     const stats = getSummaryStats();
+    if (activeStudentBadge) {
+      activeStudentBadge.textContent = state.studentName || "Not Selected";
+    }
+    if (hubGreetingTitle) {
+      hubGreetingTitle.textContent = state.studentName
+        ? `Welcome, ${state.studentName}! Share Your Big Ideas!`
+        : "Read the Clues, Then Share Your Big Ideas!";
+    }
     overallProgressText.textContent = `${stats.completed} / ${MISSIONS.length} Completed`;
     hubCompletedCount.textContent = `${stats.completed} / ${MISSIONS.length}`;
     hubTotalWords.textContent = stats.totalWords.toLocaleString();
@@ -806,23 +931,38 @@
   // ---------- Event Wiring ----------
 
   function init() {
-    studentNameInput.value = state.studentName;
-    studentClassInput.value = state.studentClass;
+    if (welcomeStudentSelect) {
+      welcomeStudentSelect.addEventListener("change", updateWelcomePreview);
+    }
 
-    studentNameInput.addEventListener("input", () => {
-      state.studentName = studentNameInput.value;
-      saveState();
-    });
+    if (startSeriesBtn) {
+      startSeriesBtn.addEventListener("click", () => {
+        const picked = welcomeStudentSelect ? welcomeStudentSelect.value : "";
+        if (!picked) return;
+        selectStudentProfile(picked);
+        currentMissionId = null;
+        showView("hub");
+        renderHub();
+      });
+    }
 
-    studentClassInput.addEventListener("input", () => {
-      state.studentClass = studentClassInput.value;
-      saveState();
-    });
+    if (switchStudentBtn) {
+      switchStudentBtn.addEventListener("click", () => {
+        currentMissionId = null;
+        renderWelcome();
+        showView("welcome");
+      });
+    }
 
     brandHomeBtn.addEventListener("click", () => {
       currentMissionId = null;
-      showView("hub");
-      renderHub();
+      if (state.studentName && CLASS_STUDENTS.includes(state.studentName)) {
+        showView("hub");
+        renderHub();
+      } else {
+        renderWelcome();
+        showView("welcome");
+      }
     });
 
     backToHubBtn.addEventListener("click", () => {
@@ -993,7 +1133,8 @@
 
     window.addEventListener("beforeunload", stopSpeech);
 
-    renderHub();
+    renderWelcome();
+    showView("welcome");
   }
 
   init();

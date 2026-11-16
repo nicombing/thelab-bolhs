@@ -27,26 +27,14 @@
           </span>
         </button>
 
-        <div class="topbar-status">
+        <div class="topbar-status" id="topbar-status">
           <div class="student-chip" id="student-chip-wrap">
-            <label for="student-name-input" class="sr-only">Student Name</label>
-            <input
-              type="text"
-              id="student-name-input"
-              class="student-input"
-              placeholder="Your Name..."
-              maxlength="40"
-              autocomplete="name"
-            >
+            <span class="student-chip-label">Student:</span>
+            <strong id="active-student-badge" class="active-student-badge">Not Selected</strong>
             <span class="chip-divider" aria-hidden="true"></span>
-            <label for="student-class-input" class="sr-only">Class</label>
-            <input
-              type="text"
-              id="student-class-input"
-              class="student-input student-class-input"
-              placeholder="Class (e.g. 5A)"
-              maxlength="12"
-            >
+            <button type="button" id="switch-student-btn" class="student-switch-btn">
+              Change Name
+            </button>
           </div>
 
           <div class="progress-pill" aria-live="polite">
@@ -70,15 +58,61 @@
 
     <!-- Main Container -->
     <main class="main-content">
+      <!-- VIEW 0: WELCOME / STUDENT PICKER PAGE -->
+      <section id="welcome-view" class="welcome-view container">
+        <div class="welcome-card">
+          <div class="welcome-visual" aria-hidden="true">
+            <svg viewBox="0 0 80 80" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 20A6 6 0 0 1 20 14h14a8 8 0 0 1 6 6v44a6 6 0 0 0-6-6H20a6 6 0 0 1-6-6V20Z"/>
+              <path d="M66 20A6 6 0 0 0 60 14H46a8 8 0 0 0-6 6v44a6 6 0 0 1 6-6h14a6 6 0 0 0 6-6V20Z"/>
+              <circle cx="40" cy="10" r="3" fill="currentColor"/>
+            </svg>
+          </div>
+
+          <div class="eyebrow welcome-eyebrow">
+            <span class="eyebrow-badge">Grade 5 English Class</span>
+            <span class="eyebrow-meta">Elfin 5 Semester Review Series</span>
+          </div>
+
+          <h1>Welcome, Grade 5 Explorers!</h1>
+          <p class="welcome-desc">
+            Select your name from the class dropdown menu below to load your personal Explorer Journal and start the 6-mission reading &amp; writing review series.
+          </p>
+
+          <div class="welcome-form-box">
+            <label for="welcome-student-select" class="welcome-label">Choose Your Name From Class List</label>
+            <div class="select-wrapper">
+              <select id="welcome-student-select" class="welcome-select">
+                <option value="">-- Select Your Name --</option>
+              </select>
+            </div>
+
+            <div id="welcome-student-preview" class="welcome-student-preview hidden" aria-live="polite"></div>
+
+            <button type="button" id="start-series-btn" class="btn btn-primary btn-lg welcome-start-btn" disabled>
+              <span>Pick Your Name to Start the Series</span>
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="welcome-roster-note">
+            <span>15 Students Enrolled • Auto-saves your writing on this device</span>
+          </div>
+        </div>
+      </section>
+
       <!-- VIEW 1: MISSION HUB -->
-      <section id="hub-view" class="hub-view container">
+      <section id="hub-view" class="hub-view container hidden">
         <div class="hero-panel">
           <div class="hero-copy">
             <div class="eyebrow">
               <span class="eyebrow-badge">Units 1–8 Review Quest</span>
               <span class="eyebrow-meta">Read • Warm Up • Explain (100+ Words)</span>
             </div>
-            <h1>Read the Clues, Then Share Your Big Ideas!</h1>
+            <h1 id="hub-greeting-title">Read the Clues, Then Share Your Big Ideas!</h1>
             <p class="hero-desc">
               Welcome back, Grade 5 Explorer! This semester you learned about <strong>plants, houses, birds, money, matter, viruses, world heritage sites,</strong> and <strong>the human body</strong>. Pick a mission below, read the study guide carefully, test your memory, and write at least <strong>100 words</strong> to solve the challenge at the bottom.
             </p>
