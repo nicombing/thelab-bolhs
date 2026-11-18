@@ -123,6 +123,49 @@ textarea {
   padding-block: 10px;
 }
 
+.topbar-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.track-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-soft);
+  padding: 3px;
+  border-radius: 999px;
+}
+
+.track-pill {
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding: 5px 11px;
+  border-radius: 999px;
+  transition: background-color 160ms ease-out, color 160ms ease-out;
+  white-space: nowrap;
+}
+
+.track-pill:hover {
+  color: var(--accent-teal);
+}
+
+.track-pill.is-active {
+  background: var(--accent-teal);
+  color: #ffffff;
+}
+
+.welcome-note-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -2230,6 +2273,59 @@ textarea {
 .motion-stage[data-scene="mission-6"][data-mode="highway"] .m6-center-forest,
 .motion-stage[data-scene="mission-6"][data-mode="highway"] .m6-bypass-road,
 .motion-stage[data-scene="mission-6"][data-mode="bypass"] .m6-center-road {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* IPS Kelas 7 Scene Mode Transitions */
+.ips1-tech-view,
+.ips1-culture-view,
+.ips2-sky-bad,
+.ips2-sky-good,
+.ips2-grass-bad,
+.ips2-grass-good,
+.ips2-bad-layer,
+.ips2-good-layer,
+.ips3-econ-view,
+.ips3-sdgs-view,
+.ips4-demo-view,
+.ips4-energy-view {
+  transition: opacity 220ms ease-out;
+}
+
+.motion-stage[data-scene="ips7-mission-1"][data-mode="teknologi"] .ips1-culture-view,
+.motion-stage[data-scene="ips7-mission-1"][data-mode="budaya"] .ips1-tech-view {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.motion-stage[data-scene="ips7-mission-2"][data-mode="tercemar"] .ips2-sky-good,
+.motion-stage[data-scene="ips7-mission-2"][data-mode="tercemar"] .ips2-grass-good,
+.motion-stage[data-scene="ips7-mission-2"][data-mode="tercemar"] .ips2-good-layer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.motion-stage[data-scene="ips7-mission-2"][data-mode="lestari"] .ips2-sky-bad,
+.motion-stage[data-scene="ips7-mission-2"][data-mode="lestari"] .ips2-grass-bad,
+.motion-stage[data-scene="ips7-mission-2"][data-mode="lestari"] .ips2-bad-layer {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.motion-stage[data-scene="ips7-mission-3"][data-mode="ekonomi"] .ips3-sdgs-view,
+.motion-stage[data-scene="ips7-mission-3"][data-mode="sdgs"] .ips3-econ-view {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.motion-stage[data-scene="ips7-mission-4"][data-mode="demografi"] .ips4-energy-view,
+.motion-stage[data-scene="ips7-mission-4"][data-mode="energi"] .ips4-demo-view {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;

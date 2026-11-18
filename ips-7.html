@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jurnal Eksplorasi IPS Kelas 7 — thelab-bolhs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Sticky Bar -->
+    <header class="topbar no-print">
+      <div class="container topbar-inner">
+        <div class="topbar-brand-group">
+          <button type="button" id="brand-home-btn" class="brand" aria-label="Ke Beranda Misi IPS Kelas 7">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="16" cy="16" r="11"/>
+                <ellipse cx="16" cy="16" rx="5" ry="11"/>
+                <line x1="5" y1="16" x2="27" y2="16"/>
+              </svg>
+            </span>
+            <span class="brand-text">
+              <strong>Eksplorasi IPS 7</strong>
+              <small>Ilmu Pengetahuan Sosial • Kelas 7</small>
+            </span>
+          </button>
+
+          <nav class="track-switcher" aria-label="Pindah Jenjang / Mata Pelajaran">
+            <a href="index.html" class="track-pill">Grade 5 English</a>
+            <a href="ips-7.html" class="track-pill is-active" aria-current="page">IPS Kelas 7</a>
+          </nav>
+        </div>
+
+        <div class="topbar-status" id="topbar-status">
+          <div class="student-chip" id="student-chip-wrap">
+            <span class="student-chip-label">Siswa:</span>
+            <strong id="active-student-badge" class="active-student-badge">Siswa Kelas 7</strong>
+            <span class="chip-divider" aria-hidden="true"></span>
+            <button type="button" id="edit-student-name-btn" class="student-switch-btn">
+              Ubah Nama
+            </button>
+          </div>
+
+          <div class="progress-pill" aria-live="polite">
+            <span class="pill-dot" aria-hidden="true"></span>
+            <span id="overall-progress-text">0 / 4 Selesai</span>
+          </div>
+
+          <button type="button" id="open-report-btn" class="btn btn-secondary btn-sm">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>Laporan Saya</span>
+          </button>
+        </div>
+
+        <button type="button" id="topbar-admin-btn" class="admin-mini-btn no-print" title="Dasbor Guru / Admin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span>Admin</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+      <!-- VIEW 1: MISSION HUB -->
+      <section id="hub-view" class="hub-view container">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <div class="eyebrow">
+              <span class="eyebrow-badge">IPS Kelas 7 • Pertemuan 10, 11, 14 &amp; 18</span>
+              <span class="eyebrow-meta">Baca • Kuis • Esai Analisis (100+ Kata)</span>
+            </div>
+            <h1 id="hub-greeting-title">Pahami Materi IPS, Jawab Kuis, &amp; Tulis Analisis Terbaikmu!</h1>
+            <p class="hero-desc">
+              Selamat datang di Jurnal Eksplorasi IPS Kelas 7! Pelajari topik <strong>Dinamika Sosial Budaya, Pelestarian Lingkungan, SDGs &amp; Masalah Pokok Ekonomi,</strong> serta <strong>Potensi Indonesia Menuju Negara Maju 2045</strong>. Pilih misi di bawah ini, pahami bacaan &amp; diagram interaktifnya, kerjakan kuis pemahaman, lalu tulis esai minimal <strong>100 kata</strong>.
+            </p>
+            <div class="hero-stats-grid">
+              <div class="stat-box">
+                <span class="stat-label">Misi Selesai</span>
+                <strong class="stat-value" id="hub-completed-count">0 / 4</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Total Kata Ditulis</span>
+                <strong class="stat-value" id="hub-total-words">0</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Skor Kuis</span>
+                <strong class="stat-value" id="hub-stars-count">0 / 8</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Peringkat Belajar</span>
+                <strong class="stat-value stat-rank" id="hub-rank-label">Pengamat Pemula</strong>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-guide-card" aria-label="Cara kerja setiap misi">
+            <h2>Langkah Setiap Misi</h2>
+            <ol class="steps-list">
+              <li>
+                <span class="step-num">1</span>
+                <div>
+                  <strong>Pelajari Bahan Bacaan &amp; Visual</strong>
+                  <p>Klik istilah yang disorot untuk membuka artinya di Kamus Konsep, atau tekan <em>Baca Nyaring</em>.</p>
+                </div>
+              </li>
+              <li>
+                <span class="step-num">2</span>
+                <div>
+                  <strong>Kerjakan Kuis Pemahaman</strong>
+                  <p>Jawab 2 soal latihan pada setiap topik lengkap dengan pembahasannya sebelum menulis esai.</p>
+                </div>
+              </li>
+              <li>
+                <span class="step-num">3</span>
+                <div>
+                  <strong>Tulis Esai Analisis (100+ Kata)</strong>
+                  <p>Gunakan daftar gagasan, pembuka kalimat, dan kata kunci IPS untuk menjawab tantangan HOTS.</p>
+                </div>
+              </li>
+            </ol>
+          </aside>
+        </div>
+
+        <div class="section-heading-row">
+          <div>
+            <h2>Pilih Misi Belajar IPS Kelas 7</h2>
+            <p>Tulisanmu tersimpan otomatis di peramban dan tersinkron ke cloud sehingga aman dilanjutkan kapan saja.</p>
+          </div>
+          <div class="filter-pills" role="group" aria-label="Filter misi">
+            <button type="button" class="filter-pill is-active" data-filter="all">Semua Misi (4)</button>
+            <button type="button" class="filter-pill" data-filter="pending">Sedang Dikerjakan / Baru</button>
+            <button type="button" class="filter-pill" data-filter="done">Selesai</button>
+          </div>
+        </div>
+
+        <div id="missions-grid" class="missions-grid"></div>
+      </section>
+
+      <!-- VIEW 2: ACTIVE MISSION (Reading -> Quiz -> 100-Word Challenge) -->
+      <section id="mission-view" class="mission-view container hidden" aria-live="polite">
+        <div class="mission-nav-bar no-print">
+          <button type="button" id="back-to-hub-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Semua Misi</span>
+          </button>
+
+          <div id="mission-stepper" class="mission-stepper" role="navigation" aria-label="Pindah misi"></div>
+
+          <a href="#challenge-section" class="btn btn-outline btn-sm">Lompat ke Esai</a>
+        </div>
+
+        <!-- Mission Banner -->
+        <article class="mission-banner" id="mission-banner"></article>
+
+        <!-- Part 1: Reading Material -->
+        <div class="reading-layout">
+          <div class="reading-card">
+            <div class="reading-toolbar">
+              <div class="reading-badge-group">
+                <span class="section-tag">Bagian 1 • Bahan Bacaan</span>
+                <span id="reading-time-pill" class="meta-pill">4 mnt baca</span>
+              </div>
+              <div class="audio-controls" id="audio-controls">
+                <button type="button" id="tts-toggle-btn" class="btn btn-secondary btn-sm">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  </svg>
+                  <span id="tts-btn-label">Baca Nyaring</span>
+                </button>
+                <button type="button" id="tts-speed-btn" class="btn btn-ghost btn-sm" title="Ubah kecepatan suara">
+                  1.0x
+                </button>
+              </div>
+            </div>
+
+            <div class="reading-instruction">
+              Ketuk <span class="vocab-sample">istilah yang disorot</span> untuk melihat penjelasan lengkapnya di kotak Kamus Konsep!
+            </div>
+
+            <div id="reading-motion-stage" class="motion-stage"></div>
+
+            <div id="reading-sections" class="reading-sections"></div>
+          </div>
+
+          <!-- Sticky Side Panel: Kamus Konsep & Penguat Konsep -->
+          <aside class="reading-sidebar">
+            <div class="sidebar-card glossary-card" id="glossary-card">
+              <div class="sidebar-card-head">
+                <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <h3>Kamus Konsep IPS</h3>
+              </div>
+              <div id="glossary-active-box" class="glossary-active-box">
+                <p class="glossary-placeholder">Klik salah satu istilah yang disorot dalam bacaan untuk melihat arti dan contoh penerapannya.</p>
+              </div>
+              <div class="glossary-chip-list-label">Istilah Penting dalam Materi Ini:</div>
+              <div id="glossary-chips" class="glossary-chips"></div>
+            </div>
+
+            <div class="sidebar-card grammar-card" id="grammar-card"></div>
+          </aside>
+        </div>
+
+        <!-- Part 2: Quick Warm-Up Quiz -->
+        <section class="warmup-card" id="warmup-section" aria-labelledby="warmup-title">
+          <div class="warmup-head">
+            <div>
+              <span class="section-tag tag-amber">Bagian 2 • Kuis Pemahaman Siswa</span>
+              <h2 id="warmup-title">Uji Pemahaman Bacaanmu</h2>
+              <p>Jawab kedua soal kuis di bawah ini untuk memastikan kamu menguasai konsep inti sebelum menulis esai!</p>
+            </div>
+            <div class="warmup-score-pill" id="warmup-score-pill">0 / 2 Benar</div>
+          </div>
+          <div id="warmup-questions-list" class="warmup-questions-list"></div>
+        </section>
+
+        <!-- Part 3: Main Essay Challenge (100 Words Minimum) -->
+        <section class="challenge-card" id="challenge-section" aria-labelledby="challenge-title">
+          <div class="challenge-head">
+            <span class="section-tag tag-teal">Bagian 3 • Tantangan Esai HOTS (Minimal 100 Kata)</span>
+            <h2 id="challenge-title">Selesaikan Soal Analisis di Bawah Ini</h2>
+          </div>
+
+          <div id="prompt-callout" class="prompt-callout"></div>
+
+          <div class="writing-workspace">
+            <!-- Left / Top Writing Scaffolds -->
+            <div class="scaffolds-column">
+              <div class="scaffold-box">
+                <h3>Daftar Gagasan (Sertakan Poin Ini)</h3>
+                <p class="scaffold-hint">Centang setiap poin setelah kamu menjelaskannya di dalam jawabanmu.</p>
+                <div id="outline-checklist" class="outline-checklist"></div>
+              </div>
+
+              <div class="scaffold-box">
+                <h3>Pembuka Kalimat (Klik untuk Menyisipkan)</h3>
+                <p class="scaffold-hint">Bingung memulai paragraf? Klik salah satu pembuka kalimat di bawah.</p>
+                <div id="starter-chips" class="starter-chips"></div>
+              </div>
+
+              <div class="scaffold-box">
+                <h3>Kata Kunci IPS Kelas 7</h3>
+                <p class="scaffold-hint">Istilah akan otomatis berwarna hijau jika kamu menggunakannya di esai!</p>
+                <div id="power-words-grid" class="power-words-grid"></div>
+              </div>
+            </div>
+
+            <!-- Right / Main Writing Editor -->
+            <div class="editor-column">
+              <div class="editor-topbar">
+                <label for="essay-textarea" class="editor-label">Jawaban Analisis / Uraianmu</label>
+                <span id="draft-save-status" class="save-status">Siap menulis</span>
+              </div>
+
+              <textarea
+                id="essay-textarea"
+                class="essay-textarea"
+                rows="13"
+                placeholder="Mulai tulis jawabanmu di sini. Jelaskan setiap argumen dengan runtut dan sertakan contoh nyata dari bahan bacaan di atas..."
+              ></textarea>
+
+              <!-- Live 100-Word Progress Meter -->
+              <div class="word-meter-box" id="word-meter-box">
+                <div class="word-meter-row">
+                  <div class="word-counter-readout">
+                    <span class="word-num" id="live-word-count">0</span>
+                    <span class="word-target">/ 100 kata minimal</span>
+                  </div>
+                  <div class="word-stats-extra">
+                    <span id="live-sentence-count">0 kalimat</span>
+                    <span aria-hidden="true">•</span>
+                    <span id="live-power-count">0 kata kunci dipakai</span>
+                  </div>
+                </div>
+                <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="word-progress-track">
+                  <div class="progress-fill" id="word-progress-fill"></div>
+                </div>
+                <p class="word-meter-message" id="word-meter-message">
+                  Tulis minimal 100 kata agar jawaban analisismu lengkap dan tombol Kirim terbuka.
+                </p>
+              </div>
+
+              <div class="editor-actions">
+                <button type="button" id="clear-draft-btn" class="btn btn-ghost btn-sm">Hapus Draf</button>
+                <button type="button" id="submit-answer-btn" class="btn btn-primary" disabled>
+                  Tulis 100 kata lagi untuk mengirim
+                </button>
+              </div>
+
+              <!-- Submission Feedback Box -->
+              <div id="submission-feedback" class="submission-feedback hidden" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <div class="mission-footer-nav no-print">
+            <button type="button" id="prev-mission-btn" class="btn btn-secondary">Misi Sebelumnya</button>
+            <button type="button" id="next-mission-btn" class="btn btn-secondary">Misi Berikutnya</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- VIEW 3: REPORT / EXPORT VIEW -->
+      <section id="report-view" class="report-view container hidden">
+        <div class="report-toolbar no-print">
+          <button type="button" id="report-back-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Kembali ke Misi</span>
+          </button>
+
+          <div class="report-export-actions">
+            <button type="button" id="copy-report-btn" class="btn btn-secondary btn-sm">Salin Semua Jawaban</button>
+            <button type="button" id="download-report-btn" class="btn btn-secondary btn-sm">Unduh .TXT</button>
+            <button type="button" id="print-report-btn" class="btn btn-primary btn-sm">Cetak / Simpan PDF</button>
+          </div>
+        </div>
+
+        <div id="report-sheet" class="report-sheet"></div>
+      </section>
+
+      <!-- VIEW 4: PASSWORD-PROTECTED TEACHER ADMIN DASHBOARD -->
+      <section id="admin-view" class="admin-view container hidden">
+        <div class="admin-topbar no-print">
+          <div class="admin-title-group">
+            <span class="section-tag tag-teal">Dasbor Admin Guru</span>
+            <h1>Hasil Belajar &amp; Jawaban IPS Kelas 7</h1>
+            <p>Pantau jawaban tersimpan, draf, jumlah kata, dan skor kuis IPS Kelas 7 secara langsung.</p>
+          </div>
+          <div class="admin-actions">
+            <span id="admin-refresh-status" class="admin-refresh-status" aria-live="polite">
+              <span class="motion-live-dot" aria-hidden="true"></span>
+              <span>Auto-refresh: 5 dtk</span>
+            </span>
+            <button type="button" id="admin-refresh-btn" class="btn btn-secondary btn-sm">Segarkan</button>
+            <button type="button" id="admin-export-csv-btn" class="btn btn-secondary btn-sm">Ekspor CSV</button>
+            <button type="button" id="admin-export-json-btn" class="btn btn-secondary btn-sm">Cadangan .JSON</button>
+            <label for="admin-import-json-input" class="btn btn-secondary btn-sm" style="cursor: pointer;">
+              Impor .JSON
+              <input type="file" id="admin-import-json-input" accept=".json,application/json" class="sr-only">
+            </label>
+            <button type="button" id="admin-print-btn" class="btn btn-primary btn-sm">Cetak Laporan</button>
+            <button type="button" id="admin-logout-btn" class="btn btn-ghost btn-sm">Kunci &amp; Keluar</button>
+          </div>
+        </div>
+
+        <!-- Class Summary KPI Cards -->
+        <div id="admin-kpi-grid" class="hero-stats-grid admin-kpi-grid"></div>
+
+        <!-- Filters -->
+        <div class="admin-filters-bar no-print">
+          <div class="admin-filter-item">
+            <label for="admin-student-filter">Filter Siswa</label>
+            <select id="admin-student-filter" class="admin-select">
+              <option value="all">Semua Siswa</option>
+            </select>
+          </div>
+          <div class="admin-filter-item">
+            <label for="admin-mission-filter">Filter Misi</label>
+            <select id="admin-mission-filter" class="admin-select">
+              <option value="all">Semua 4 Misi</option>
+            </select>
+          </div>
+          <div class="admin-filter-item">
+            <label for="admin-status-filter">Filter Aktivitas</label>
+            <select id="admin-status-filter" class="admin-select">
+              <option value="all">Tampilkan Semua</option>
+              <option value="active">Dengan Tulisan / Skor Kuis</option>
+              <option value="completed">Misi Sudah Selesai</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Roster Summary Table -->
+        <div class="admin-table-card">
+          <h2>Ringkasan Progres IPS Kelas 7</h2>
+          <div class="admin-table-wrap">
+            <table class="admin-roster-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nama Siswa</th>
+                  <th>Misi Selesai</th>
+                  <th>Draf Berjalan</th>
+                  <th>Total Kata</th>
+                  <th>Skor Kuis</th>
+                  <th class="no-print">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="admin-roster-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Detailed Student Submissions -->
+        <div class="admin-submissions-section">
+          <h2>Detail Jawaban Siswa</h2>
+          <div id="admin-submissions-list" class="admin-submissions-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Confirm Clear Draft Modal -->
+  <div id="confirm-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="modal-card">
+      <h3 id="confirm-modal-title">Hapus draf tulisan saat ini?</h3>
+      <p>Tindakan ini akan menghapus ketikanmu pada misi ini agar kamu bisa memulai ulang dari awal.</p>
+      <div class="modal-actions">
+        <button type="button" id="confirm-cancel-btn" class="btn btn-secondary">Pertahankan Tulisan</button>
+        <button type="button" id="confirm-proceed-btn" class="btn btn-danger">Ya, Hapus Draf</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional Rename Modal -->
+  <div id="rename-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="rename-modal-title">
+    <div class="modal-card">
+      <h3 id="rename-modal-title">Ubah Nama Tampilan Siswa</h3>
+      <p style="margin-bottom: 12px;">Masukkan namamu jika ingin ditampilkan di laporan belajar dan dasbor guru.</p>
+      <form id="rename-form" class="admin-login-form">
+        <label for="rename-input" class="sr-only">Nama Siswa</label>
+        <input
+          type="text"
+          id="rename-input"
+          class="admin-password-input"
+          placeholder="Contoh: Siswa Kelas 7"
+          maxlength="48"
+        >
+        <div class="modal-actions">
+          <button type="button" id="rename-cancel-btn" class="btn btn-secondary">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Nama</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Password Modal -->
+  <div id="admin-login-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <div class="modal-card">
+      <div class="admin-modal-head">
+        <span class="admin-lock-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <div>
+          <h3 id="admin-modal-title">Akses Admin Guru</h3>
+          <p style="margin-bottom: 0;">Masukkan kata sandi admin untuk melihat seluruh jawaban IPS Kelas 7.</p>
+        </div>
+      </div>
+
+      <form id="admin-login-form" class="admin-login-form">
+        <label for="admin-password-input" class="sr-only">Kata Sandi Admin</label>
+        <input
+          type="password"
+          id="admin-password-input"
+          class="admin-password-input"
+          placeholder="Masukkan kata sandi..."
+          autocomplete="current-password"
+        >
+        <p id="admin-login-error" class="admin-login-error hidden" role="alert">
+          Kata sandi salah. Silakan coba lagi.
+        </p>
+        <div class="modal-actions">
+          <button type="button" id="admin-modal-cancel-btn" class="btn btn-secondary">Batal</button>
+          <button type="submit" id="admin-modal-submit-btn" class="btn btn-primary">Buka Dasbor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="ips7-data.js"></script>
+  <script src="ips7-motion.js"></script>
+  <script src="ips7-app.js"></script>
+</body>
+</html>

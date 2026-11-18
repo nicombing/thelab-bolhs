@@ -1,12 +1,13 @@
 # thelab-bolhs
 
-Interactive Grade 5 English Semester Review (**Elfin 5 Explorer Journal**) with story-driven SVG motion graphics, clickable vocabulary definitions, quick comprehension checks, and a 100-word minimum writing workspace.
+Interactive learning & writing review hub with two tracks:
+1. **Grade 5 English (`index.html` / `/`)**: Elfin 5 Explorer Journal with 6 cross-unit missions.
+2. **Grade 7 Social Studies (`ips-7.html` / `/ips-7`)**: Jurnal Eksplorasi IPS Kelas 7 covering Pertemuan 10, 11, 14, and 18 in Bahasa Indonesia.
 
 ## Features
-- **6 Cross-Unit Review Missions** covering Elfin 5 Units 1–8 (*Plants, Houses, Birds, Money, Matter, Viruses, World Heritage Sites, The Human Body*).
-- **Interactive Motion Graphics** (`motion.js`) with toggleable scenes for every reading passage.
-- **Word Explorer & Read Aloud** support (`app.js`) for Grade 5 learners.
-- **100-Word Minimum Challenge** with guided outline checklists, sentence starters, power-word tracking, local auto-save, and printable/downloadable reports.
+- **Interactive Motion Graphics** (`motion.js` & `ips7-motion.js`) with toggleable scenes for every reading passage.
+- **Word Explorer / Kamus Konsep & Read Aloud** support (`app.js` & `ips7-app.js`).
+- **100-Word Minimum Challenge** with guided outline checklists, sentence starters, power-word tracking, local auto-save, Supabase cloud sync (`thelab_bolhs_submissions` & `thelab_ips7_submissions`), and Teacher Admin Dashboard.
 
 ## Vercel Deployment
-Import `nicombing/thelab-bolhs` in Vercel (defaults to `thelab-bolhs.vercel.app`) with static serving configured in `vercel.json`.
+Import `nicombing/thelab-bolhs` in Vercel (defaults to `thelab-bolhs.vercel.app`) with static serving and `cleanUrls: true` configured in `vercel.json` (`/ips-7` routes to `ips-7.html`).
