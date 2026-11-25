@@ -186,6 +186,10 @@
                 .join("")}</ul>`;
             }
 
+            if (sec.bullets && sec.twoCol) {
+              bodyHtml += `<div style="height: 14px"></div>`;
+            }
+
             if (sec.twoCol) {
               bodyHtml += `
                 <div class="two-col-grid">
@@ -239,6 +243,14 @@
           })
           .join("");
 
+        const heroImgHtml = topic.heroImage
+          ? `
+          <figure class="topic-figure">
+            <img src="${escapeHtml(topic.heroImage.src)}" alt="${escapeHtml(topic.heroImage.alt)}" loading="lazy">
+            <figcaption>${escapeHtml(topic.heroImage.caption)}</figcaption>
+          </figure>`
+          : "";
+
         return `
           <article class="topic-article" id="topic-${escapeHtml(topic.id)}">
             <header class="topic-header">
@@ -249,6 +261,7 @@
               <h2>${escapeHtml(topic.title)}</h2>
               <p class="topic-summary">${escapeHtml(topic.summary)}</p>
             </header>
+            ${heroImgHtml}
             ${sectionsHtml}
           </article>`;
       })

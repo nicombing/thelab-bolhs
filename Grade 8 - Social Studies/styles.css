@@ -490,6 +490,30 @@ button, input, textarea {
   color: var(--text-secondary);
 }
 
+.topic-figure {
+  margin: 0 0 24px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-page);
+}
+
+.topic-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 360px;
+  object-fit: cover;
+}
+
+.topic-figure figcaption {
+  padding: 10px 14px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: var(--bg-subtle);
+  border-top: 1px solid var(--border-soft);
+}
+
 .topic-section {
   margin-bottom: 28px;
 }

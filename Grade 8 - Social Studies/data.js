@@ -11,55 +11,65 @@ window.IPS8_DATA = {
   },
 
   glossary: {
+    "mobilis": {
+      term: "Mobilis (Bahasa Latin)",
+      category: "Unit 1 • Mobilitas Sosial",
+      def: "Asal kata dari 'mobilitas' yang berarti mudah dipindahkan atau banyak bergerak dari satu tempat ke tempat yang lain."
+    },
     "mobilitas sosial": {
       term: "Mobilitas Sosial",
-      category: "Topik 1",
-      def: "Perubahan, pergeseran, atau perpindahan posisi/kedudukan status seseorang atau sekelompok orang dari satu lapisan ke lapisan sosial lainnya dalam struktur masyarakat."
+      category: "Unit 1 • Mobilitas Sosial",
+      def: "Perpindahan posisi seseorang atau sekelompok orang dari satu lapisan sosial ke lapisan sosial lainnya dalam struktur masyarakat (naik, turun, maupun setara)."
     },
     "social climbing": {
       term: "Social Climbing (Vertikal Naik)",
-      category: "Topik 1",
-      def: "Peningkatan status sosial seseorang dari derajat yang lebih rendah ke derajat yang lebih tinggi (misalnya melalui pendidikan atau prestasi kerja)."
+      category: "Unit 1 • Mobilitas Sosial",
+      def: "Peningkatan status atau kedudukan seseorang dari lapisan sosial rendah menuju lapisan sosial yang lebih tinggi (misalnya promosi jabatan atau wirausaha sukses)."
     },
     "social sinking": {
       term: "Social Sinking (Vertikal Turun)",
-      category: "Topik 1",
-      def: "Penurunan derajat status sosial seseorang dari kedudukan tinggi ke kedudukan yang lebih rendah (misalnya akibat pelanggaran hukum atau pemecatan)."
+      category: "Unit 1 • Mobilitas Sosial",
+      def: "Proses penurunan kedudukan atau status sosial seseorang ke tingkat yang lebih rendah (misalnya kebangkrutan usaha atau pemberhentian akibat korupsi)."
     },
     "mobilitas horizontal": {
       term: "Mobilitas Horizontal",
-      category: "Topik 1",
-      def: "Perpindahan status sosial dalam lapisan yang setaraf tanpa mengubah tinggi-rendahnya derajat kedudukan seseorang."
+      category: "Unit 1 • Mobilitas Sosial",
+      def: "Peralihan individu atau objek sosial dari satu kelompok sosial ke kelompok sosial lain yang sederajat tanpa mengubah tinggi-rendahnya derajat kedudukan."
     },
     "social elevator": {
       term: "Social Elevator",
-      category: "Topik 1",
-      def: "Peran lembaga pendidikan sebagai 'lift sosial' tercepat dan paling demokratis untuk mengangkat derajat martabat individu dan keluarga."
+      category: "Unit 1 • Mobilitas Sosial",
+      def: "Perumpamaan bagi lembaga pendidikan formal sebagai perangkat pengangkat kedudukan sosial yang paling konkret dan demokratis."
     },
     "politik etis": {
-      term: "Politik Etis (Trilogi van Deventer)",
-      category: "Topik 3",
-      def: "Kebijakan balas budi pemerintah kolonial Belanda awal abad ke-20 yang meliputi Edukasi, Irigasi, dan Emigrasi."
+      term: "Politik Etis (Politik Balas Budi)",
+      category: "Unit 2 • Pergerakan Nasional",
+      def: "Gagasan Pieter Brooshooft dan C.Th. van Deventer awal abad ke-20 melalui tiga program pokok: Irigasi, Emigrasi, dan Edukasi."
     },
     "stovia": {
       term: "STOVIA",
-      category: "Topik 3",
-      def: "School tot Opleiding van Inlandsche Artsen — sekolah kedokteran bumiputera di Batavia yang melahirkan banyak tokoh pergerakan nasional."
+      category: "Unit 2 • Pergerakan Nasional",
+      def: "Sekolah kedokteran khusus pribumi di Jakarta tempat dr. Sutomo dan rekan-rekannya mendirikan Budi Utomo pada 20 Mei 1908."
     },
     "sumpah pemuda": {
       term: "Sumpah Pemuda (28 Oktober 1928)",
-      category: "Topik 3",
-      def: "Ikrar bersejarah hasil Kongres Pemuda II yang menyatukan berbagai organisasi kedaerahan ke dalam satu tanah air, satu bangsa, dan satu bahasa persatuan: Indonesia."
+      category: "Unit 2 • Pergerakan Nasional",
+      def: "Ikrar Kongres Pemuda II (ketua Sugondo Djojopuspito, sekretaris Mohammad Yamin) yang menyatukan sekat kedaerahan ke dalam satu tanah air, bangsa, dan bahasa Indonesia."
+    },
+    "seikerei": {
+      term: "Seikerei",
+      category: "Unit 2 • Pendudukan Jepang",
+      def: "Tradisi membungkuk hormat ke arah matahari terbit (kaisar Jepang) yang ditentang oleh perlawanan rakyat Singaparna karena bertentangan dengan akidah."
     },
     "vacuum of power": {
       term: "Vacuum of Power",
-      category: "Topik 3",
-      def: "Kondisi kekosongan kekuasaan di Indonesia pada pertengahan Agustus 1945 setelah Jepang menyerah kepada Sekutu (15 Agustus 1945) namun tentara Sekutu belum tiba."
+      category: "Unit 2 • Proklamasi 1945",
+      def: "Kondisi kekosongan kekuasaan di Indonesia setelah Jepang menyerah tanpa syarat kepada Sekutu (15 Agustus 1945), sementara tentara Sekutu belum tiba."
     },
     "rengasdengklok": {
       term: "Peristiwa Rengasdengklok",
-      category: "Topik 3",
-      def: "Peristiwa pengamanan Soekarno dan Moh. Hatta ke Karawang oleh golongan pemuda pada 16 Agustus 1945 agar proklamasi dilakukan secara mandiri tanpa campur tangan PPKI/Jepang."
+      category: "Unit 2 • Proklamasi 1945",
+      def: "Aksi golongan pemuda (16 Agustus 1945 pukul 03.00 WIB) membawa Soekarno-Hatta ke Karawang agar proklamasi dilakukan mandiri tanpa campur tangan PPKI bentukan Jepang."
     }
   },
 
@@ -67,72 +77,98 @@ window.IPS8_DATA = {
     {
       id: "topik-1",
       number: 1,
-      badge: "Topik 1 • Sosiologi",
+      badge: "Unit 1 • Topik 1 (Sosiologi)",
       title: "Mobilitas Sosial di Indonesia",
-      readTime: "4 menit baca",
-      summary: "Memahami pengertian, bentuk-bentuk (vertikal naik, vertikal turun, horizontal), saluran utama, serta faktor pendorong dan penghambat mobilitas sosial.",
+      readTime: "6 menit baca",
+      summary: "Modul Bacaan Mandiri: Pengertian mobilitas sosial, bentuk vertikal & horizontal, saluran mobilitas, dampak positif, serta faktor pendorong & penghambat.",
+      heroImage: {
+        src: "assets/mobilitas-sosial.jpg",
+        alt: "Ilustrasi Mobilitas Sosial: Social Climbing, Social Sinking, dan Mobilitas Horizontal",
+        caption: "Ilustrasi Visual: Tiga arah mobilitas sosial — Vertikal Naik (Social Climbing), Vertikal Turun (Social Sinking), dan Mobilitas Horizontal pada lapisan yang sederajat."
+      },
       sections: [
         {
-          heading: "A. Pengertian Mobilitas Sosial",
+          heading: "1. Pengertian Mobilitas Sosial",
           paragraphs: [
-            "{{mobilitas sosial}} adalah perubahan, pergeseran, atau perpindahan posisi/kedudukan status seseorang atau sekelompok orang dari satu lapisan ke lapisan sosial lainnya dalam struktur masyarakat."
+            "Istilah mobilitas berasal dari bahasa Latin {{mobilis}}, yang berarti mudah dipindahkan atau banyak bergerak dari satu tempat ke tempat yang lain. Kata sosial yang melekat pada istilah ini mengandung arti adanya gerak yang melibatkan seseorang atau sekelompok orang dalam lingkungan kelompok sosial.",
+            "Secara sosiologis, {{mobilitas sosial}} adalah perpindahan posisi seseorang atau sekelompok orang dari lapisan satu ke lapisan yang lain. Seseorang yang mengalami perubahan status atau kedudukan sosial—baik naik menjadi lebih tinggi, turun menjadi lebih rendah, maupun sekadar berpindah posisi setara tanpa mengalami perubahan derajat—disebut telah mengalami proses mobilitas sosial."
           ]
         },
         {
-          heading: "B. Bentuk-Bentuk Mobilitas Sosial",
+          heading: "2. Bentuk-Bentuk Mobilitas Sosial",
+          paragraphs: [
+            "Berdasarkan arah pergerakan statusnya, mobilitas sosial dibedakan menjadi dua bentuk utama: mobilitas sosial vertikal (naik dan turun) serta mobilitas sosial horizontal."
+          ],
           cards: [
             {
-              tag: "Vertikal Naik",
-              title: "1. Mobilitas Vertikal Naik (Social Climbing)",
-              desc: "Peningkatan status sosial dari derajat rendah ke yang lebih tinggi.",
-              example: "Contoh: Anak buruh tani menyelesaikan pendidikan universitas dan menjadi insinyur di BUMN.",
+              tag: "Vertikal ke Atas",
+              title: "a.1. Social Climbing (Vertikal Naik)",
+              desc: "Peningkatan status atau kedudukan seseorang dari lapisan sosial rendah menuju lapisan sosial yang lebih tinggi.",
+              example: "Contoh konkret: Karyawan berprestasi dipromosikan menjadi manajer hingga direktur, atau pensiunan pegawai rendahan yang merintis usaha hingga menjadi pengusaha sukses.",
               tone: "emerald"
             },
             {
-              tag: "Vertikal Turun",
-              title: "2. Mobilitas Vertikal Turun (Social Sinking)",
-              desc: "Penurunan derajat status sosial seseorang.",
-              example: "Contoh: Pejabat publik atau pengusaha yang terbukti korupsi sehingga diberhentikan dan dihukum pidana.",
+              tag: "Vertikal ke Bawah",
+              title: "a.2. Social Sinking (Vertikal Turun)",
+              desc: "Proses penurunan kedudukan atau status sosial seseorang ke tingkat yang lebih rendah. Kerap memicu gejolak kejiwaan karena perubahan mendadak hak dan kewajiban.",
+              example: "Contoh konkret: Pengusaha yang bangkrut hingga jatuh miskin, atau pejabat publik yang diberhentikan tidak hormat dan divonis penjara akibat korupsi.",
               tone: "rose"
             },
             {
-              tag: "Setaraf",
-              title: "3. Mobilitas Horizontal",
-              desc: "Perpindahan status sosial dalam lapisan yang setaraf tanpa mengubah derajatnya.",
-              example: "Contoh: Seorang kepala SMP Negeri di Kota Padang dimutasi menjadi kepala SMP Negeri di Kota Bukittinggi.",
+              tag: "Sederajat",
+              title: "b. Mobilitas Sosial Horizontal",
+              desc: "Peralihan individu atau objek sosial dari suatu kelompok sosial ke kelompok sosial lain yang sederajat tanpa perubahan derajat kedudukan.",
+              example: "Contoh konkret: Mutasi kepala cabang perusahaan dari Kota A ke Kota B pada posisi sama, atau guru dipindahtugaskan antardaerah tanpa perubahan golongan.",
               tone: "teal"
             }
           ]
         },
         {
-          heading: "C. Saluran Utama Mobilitas Sosial",
+          heading: "3. Saluran-Saluran Mobilitas Sosial",
+          paragraphs: [
+            "Seseorang dapat mengubah status sosialnya melalui beberapa saluran institusional penting di masyarakat:"
+          ],
           bullets: [
             {
-              title: "Lembaga Pendidikan",
-              text: "Berperan sebagai {{social elevator}} tercepat dan paling demokratis untuk mengangkat derajat martabat keluarga."
+              title: "Lembaga Pendidikan (Social Elevator)",
+              text: "Merupakan saluran mobilitas vertikal yang paling konkret dan kerap diibaratkan sebagai {{social elevator}} (perangkat pengangkat kedudukan). Pendidikan memberi kesempatan setara bagi siapa saja untuk menguasai keterampilan baru."
             },
             {
-              title: "Organisasi Politik & Birokrasi",
-              text: "Memberi saluran kepada warga negara untuk berperan aktif dalam perumusan kebijakan dan menduduki jabatan publik."
+              title: "Organisasi Politik",
+              text: "Menyediakan ruang bagi individu untuk merintis karier kepemimpinan dari tingkatan anggota biasa hingga mencapai jabatan publik strategis."
             },
             {
-              title: "Organisasi Ekonomi & Koperasi",
-              text: "Memperluas akses kepemilikan modal, produksi, dan kemandirian finansial."
+              title: "Organisasi Ekonomi",
+              text: "Wadah usaha bersama seperti koperasi petani, nelayan, atau pedagang pasar yang memperjuangkan kesejahteraan dan taraf hidup para anggotanya."
             },
             {
               title: "Organisasi Profesi",
-              text: "Wadah sertifikasi dan perlindungan keahlian khusus (seperti IDI, PGRI, Ikatan Arsitek Indonesia)."
+              text: "Himpunan orang-orang berprofesi sama, seperti Persatuan Guru Republik Indonesia (PGRI), Ikatan Dokter Indonesia (IDI), dan Himpunan Pengusaha Muda Indonesia (HIPMI), untuk standarisasi profesi dan kesejahteraan kolektif."
             }
           ]
         },
         {
-          heading: "D. Faktor Pendorong & Penghambat",
+          heading: "4. Dampak Positif & Faktor Mobilitas Sosial",
+          bullets: [
+            {
+              title: "Mendorong Seseorang untuk Lebih Maju",
+              text: "Terbukanya kesempatan berpindah strata sosial memicu motivasi tinggi untuk belajar, bekerja keras, dan berprestasi."
+            },
+            {
+              title: "Mempercepat Perubahan Sosial ke Arah Lebih Baik",
+              text: "Mempercepat transformasi tatanan masyarakat, seperti peralihan masyarakat agraris tradisional menuju masyarakat industri modern."
+            },
+            {
+              title: "Meningkatkan Integrasi Sosial",
+              text: "Individu yang berhasil naik ke status sosial baru akan belajar menyesuaikan diri dengan nilai, norma, dan gaya hidup kelompok barunya secara harmonis."
+            }
+          ],
           twoCol: {
             leftTitle: "Faktor Pendorong",
             leftTone: "emerald",
             leftItems: [
-              "Struktur sosial terbuka",
-              "Akses pendidikan bermutu",
+              "Struktur sosial terbuka berbasis meritokrasi",
+              "Akses pendidikan bermutu & beasiswa",
               "Stabilitas ekonomi",
               "Kemudahan akses informasi"
             ],
@@ -141,8 +177,8 @@ window.IPS8_DATA = {
             rightItems: [
               "Kemiskinan struktural",
               "Diskriminasi gender/suku/ras",
-              "Budaya feodal tertutup",
-              "Keterbatasan geografis"
+              "Budaya feodal atau sistem kasta tertutup",
+              "Keterbatasan & keterisolasian geografis"
             ]
           }
         }
@@ -151,20 +187,25 @@ window.IPS8_DATA = {
     {
       id: "topik-3",
       number: 3,
-      badge: "Topik 3 • Sejarah",
-      title: "Tumbuhnya Kesadaran Nasional Menuju Detik-Detik Proklamasi 1945",
-      readTime: "5 menit baca",
-      summary: "Menelusuri dampak Politik Etis, perbandingan perjuangan sebelum dan sesudah 1908, Sumpah Pemuda 1928, hingga detik-detik Proklamasi 17 Agustus 1945.",
+      badge: "Unit 2 • Topik 3 (Sejarah)",
+      title: "Tumbuhnya Kesadaran Nasional Menuju Proklamasi 1945",
+      readTime: "8 menit baca",
+      summary: "Modul Bacaan Mandiri: Politik Etis, organisasi modern & Sumpah Pemuda 1928, perjuangan masa pendudukan Jepang, detik-detik Proklamasi 1945, dan Key Takeaways PAS.",
+      heroImage: {
+        src: "assets/proklamasi-1945.jpg",
+        alt: "Ilustrasi Kesadaran Nasional hingga Proklamasi Kemerdekaan Indonesia 1945",
+        caption: "Ilustrasi Visual: Dari kebangkitan kaum terpelajar dan persatuan pemuda menuju pembacaan Proklamasi Kemerdekaan 17 Agustus 1945."
+      },
       sections: [
         {
-          heading: "A. Politik Etis & Lahirnya Kaum Terpelajar",
+          heading: "1. Akar Pergerakan Nasional & Kebijakan Politik Etis",
           paragraphs: [
-            "{{politik etis}} diterapkan awal abad ke-20 dengan trilogi van Deventer (Edukasi, Irigasi, Emigrasi).",
-            "Program edukasi semula bertujuan mencetak juru tulis murah, namun menjadi 'senjata makan tuan' bagi kolonial Belanda karena membuka wawasan kemerdekaan para pemuda di sekolah kedokteran {{stovia}}."
+            "Perlawanan bangsa Indonesia sebelum abad ke-20 yang dipimpin tokoh-tokoh karismatik seperti Pangeran Diponegoro, Tuanku Imam Bonjol, dan Pattimura kerap menemui kegagalan karena masih bersifat kedaerahan (lokal).",
+            "Pada awal abad ke-20, muncul gagasan {{politik etis}} (Politik Balas Budi) yang dicetuskan oleh Pieter Brooshooft dan C.Th. van Deventer. Kebijakan ini menyatakan bahwa pemerintah kolonial Belanda memegang hutang moral melalui tiga program pokok: Irigasi, Emigrasi, dan Edukasi. Program edukasi awalnya ditujukan untuk mencetak tenaga juru tulis berupah murah, namun justru melahirkan kaum terpelajar yang menyadari martabat bangsanya serta mempelopori pergerakan nasional."
           ]
         },
         {
-          heading: "B. Perbandingan Corak Perjuangan Bangsa",
+          heading: "2. Perbandingan Corak Perjuangan Sebelum & Setelah 1908",
           table: {
             headers: ["Aspek Perbedaan", "Sebelum 1908 (Perjuangan Fisik)", "Setelah 1908 (Pergerakan Modern)"],
             rows: [
@@ -176,29 +217,100 @@ window.IPS8_DATA = {
           }
         },
         {
-          heading: "C. Puncak Persatuan & Menuju Proklamasi",
+          heading: "3. Kebangkitan Organisasi Modern & Ikrar Sumpah Pemuda 1928",
+          paragraphs: [
+            "Kelahiran kaum terpelajar mengubah cara berjuang dari perang senjata tradisional menjadi pergerakan modern berbasis organisasi, surat kabar, dan diplomasi:"
+          ],
+          bullets: [
+            {
+              title: "Budi Utomo (20 Mei 1908)",
+              text: "Didirikan oleh dr. Sutomo dan rekan-rekannya di gedung {{stovia}} Jakarta. Berfokus pada kemajuan pendidikan dan kebudayaan rakyat serta diperingati sebagai Hari Kebangkitan Nasional."
+            },
+            {
+              title: "Organisasi Pergerakan Lanjutan",
+              text: "Lahir Sarekat Islam (SI) oleh K.H. Samanhudi & H.O.S. Tjokroaminoto, Indische Partij (IP) oleh Tiga Serangkai (Douwes Dekker, Suwardi Suryaningrat, dr. Cipto Mangunkusumo), Perhimpunan Indonesia (PI) di Belanda oleh Moh. Hatta, serta Partai Nasional Indonesia (PNI) oleh Ir. Soekarno."
+            },
+            {
+              title: "Sumpah Pemuda (28 Oktober 1928)",
+              text: "{{sumpah pemuda}}: Pada Kongres Pemuda II (ketua Sugondo Djojopuspito, sekretaris Mohammad Yamin), para pemuda mengikrarkan satu tanah air, satu bangsa, dan satu bahasa persatuan, bahasa Indonesia—melebur sekat kedaerahan menjadi kesadaran satu bangsa."
+            }
+          ]
+        },
+        {
+          heading: "4. Perjuangan pada Masa Pendudukan Jepang (1942–1945)",
+          paragraphs: [
+            "Pemerintah militer Jepang membubarkan seluruh organisasi politik bentukan masa Belanda. Para tokoh pergerakan merespons melalui strategi kooperatif, gerakan rahasia, hingga perlawanan bersenjata:"
+          ],
+          cards: [
+            {
+              tag: "Kooperatif",
+              title: "Organisasi Resmi Bentukan Jepang",
+              desc: "Tokoh Empat Serangkai (Soekarno, Moh. Hatta, Ki Hajar Dewantara, K.H. Mas Mansyur) memimpin Putera dan Barisan Pelopor untuk mengonsolidasikan kekuatan rakyat dan semangat nasionalisme.",
+              example: "Strategi: Memanfaatkan fasilitas resmi Jepang sebagai panggung mengampanyekan kesadaran kebangsaan.",
+              tone: "teal"
+            },
+            {
+              tag: "Klandestin",
+              title: "Gerakan Bawah Tanah",
+              desc: "Dilakukan secara rahasia tanpa sepengetahuan militer Jepang oleh Sutan Sjahrir, Sukarni, Achmad Soebardjo, Wikana, dan Chairul Saleh.",
+              example: "Aktivitas: Memantau jalannya Perang Dunia II secara sembunyi-sembunyi melalui siaran radio Sekutu.",
+              tone: "emerald"
+            },
+            {
+              tag: "Heroik",
+              title: "Perlawanan Bersenjata Daerah",
+              desc: "Terjadi akibat penindasan Jepang: perlawanan rakyat Singaparna menentang kewajiban {{seikerei}}, perlawanan Indramayu menolak pungutan padi, dan pemberontakan PETA Blitar.",
+              example: "Tokoh PETA Blitar: Dipimpin oleh Suprijadi melawan kekejaman militer Jepang.",
+              tone: "rose"
+            }
+          ]
+        },
+        {
+          heading: "5. Rangkaian Detik-Detik Menuju Proklamasi Kemerdekaan",
           timeline: [
             {
-              date: "28 Oktober 1928",
-              title: "Sumpah Pemuda",
-              text: "{{sumpah pemuda}}: Menyatukan identitas kedaerahan (Jong Java, Jong Sumatranen Bond, Jong Ambon) menjadi ikrar satu tanah air, satu bangsa, dan bahasa persatuan Indonesia."
+              date: "6 & 9 Agustus 1945",
+              title: "Pengeboman Hiroshima & Nagasaki",
+              text: "Kota Hiroshima (6 Agustus) dan Nagasaki (9 Agustus) dibom atom oleh Sekutu sehingga melumpuhkan kekuatan militer Jepang."
             },
             {
               date: "15 Agustus 1945",
-              title: "Menyerahnya Jepang",
-              text: "Pengeboman Hiroshima (6 Agustus) dan Nagasaki (9 Agustus) menciptakan {{vacuum of power}} (kekosongan kekuasaan)."
+              title: "Jepang Menyerah & Vacuum of Power",
+              text: "Jepang menyerah tanpa syarat kepada Sekutu, menciptakan kondisi {{vacuum of power}} (kekosongan kekuasaan) di Indonesia."
             },
             {
-              date: "16 Agustus 1945",
+              date: "16 Agustus 1945 (03.00 WIB)",
               title: "Peristiwa Rengasdengklok",
-              text: "{{rengasdengklok}}: Golongan pemuda (Sukarni, Wikana, Chairul Saleh) mengamankan Soekarno-Hatta ke Karawang guna memastikan proklamasi dilakukan murni dari perjuangan mandiri bangsa Indonesia tanpa campur tangan PPKI/Jepang."
+              text: "{{rengasdengklok}}: Para pemuda membawa Soekarno dan Hatta ke Rengasdengklok, Karawang, mendesak proklamasi diumumkan mandiri tanpa melibatkan PPKI agar tidak dicap sebagai hadiah atau rekayasa Jepang."
             },
             {
-              date: "17 Agustus 1945",
-              title: "Perumusan & Pembacaan Teks Proklamasi",
-              text: "Dirumuskan di rumah Laksamana Maeda, diketik Sayuti Melik, dan dibacakan resmi pada 17 Agustus 1945 pukul 10.00 WIB di Jl. Pegangsaan Timur 56 Jakarta."
+              date: "16 Agustus 1945 (Malam)",
+              title: "Perumusan Naskah Proklamasi",
+              text: "Dilaksanakan di rumah Laksamana Tadashi Maeda (Jl. Imam Bonjol No. 1 Jakarta) karena aman dari Angkatan Darat Jepang. Ditulis tangan oleh Soekarno bersama Moh. Hatta dan Achmad Soebardjo, disaksikan Sukarni dan B.M. Diah, lalu diketik Sayuti Melik. Naskah tulisan tangan asli diselamatkan oleh B.M. Diah."
+            },
+            {
+              date: "17 Agustus 1945 (10.00 WIB)",
+              title: "Pelaksanaan Proklamasi & Penyebarluasan",
+              text: "Dibacakan resmi di Jl. Pegangsaan Timur No. 56 Jakarta dengan pengibaran Sang Saka Merah Putih jahitan Ibu Fatmawati. Berita disebarluaskan melalui radio Hoso Kyoku (Jusuf Ronodipuro), foto Mendur bersaudara, pamflet, dan buruh kereta api."
             }
           ]
+        },
+        {
+          heading: "6. Rangkuman Inti Persiapan Ujian (Key Takeaways)",
+          table: {
+            headers: ["Konsep Kunci", "Penjelasan Singkat"],
+            rows: [
+              ["Mobilitas Vertikal Naik (Social Climbing)", "Kenaikan kedudukan sosial seseorang ke lapisan yang lebih tinggi (contoh: promosi jabatan karyawan berprestasi menjadi direktur)."],
+              ["Mobilitas Vertikal Turun (Social Sinking)", "Penurunan status sosial seseorang ke lapisan yang lebih rendah (contoh: kebangkrutan usaha atau pemecatan akibat korupsi)."],
+              ["Mobilitas Horizontal", "Peralihan kelompok sosial yang sederajat tanpa mengubah derajat kedudukan seseorang (contoh: mutasi kerja antardaerah pada posisi yang sama)."],
+              ["Saluran Utama Mobilitas", "Lembaga pendidikan (social elevator), organisasi politik, organisasi ekonomi (koperasi), dan organisasi profesi (PGRI, IDI, HIPMI)."],
+              ["Politik Etis (1901)", "Kebijakan balas budi Belanda (Irigasi, Emigrasi, Edukasi) yang melahirkan golongan terpelajar penggerak kemerdekaan."],
+              ["Sumpah Pemuda (1928)", "Ikrar persatuan tanah air, bangsa, dan bahasa Indonesia yang menyatukan perjuangan kedaerahan."],
+              ["Rengasdengklok (16 Ags 1945)", "Aksi pemuda mengamankan Soekarno-Hatta agar memproklamasikan kemerdekaan secara mandiri tanpa campur tangan PPKI bentukan Jepang."],
+              ["Laksamana Maeda", "Kepala Kantor Penghubung Angkatan Laut Jepang yang rumahnya dijadikan tempat aman merumuskan teks proklamasi."],
+              ["Sayuti Melik & Fatmawati", "Sayuti Melik bertugas mengetik naskah proklamasi, sedangkan Ibu Fatmawati menjahit bendera pusaka Merah Putih."]
+            ]
+          }
         }
       ]
     }
