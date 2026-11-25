@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IPS Kelas VIII (Fase D) — Bahan Bacaan & Latihan PAS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Sticky Bar -->
+    <header class="topbar no-print">
+      <div class="container topbar-inner">
+        <button type="button" id="brand-home-btn" class="brand" aria-label="Kembali ke Ringkasan Materi">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="16" cy="16" r="11"/>
+              <path d="M5 16h22"/>
+              <path d="M16 5a15.3 15.3 0 0 1 4 11 15.3 15.3 0 0 1-4 11 15.3 15.3 0 0 1-4-11 15.3 15.3 0 0 1 4-11z"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong>IPS Kelas VIII</strong>
+            <small>Fase D • Persiapan PAS</small>
+          </span>
+        </button>
+
+        <div class="topbar-status">
+          <div class="student-chip">
+            <span class="student-chip-label">Siswa:</span>
+            <input type="text" id="student-name-input" class="student-name-input" placeholder="Ketik namamu..." aria-label="Nama Siswa">
+          </div>
+
+          <div class="progress-pill" aria-live="polite" title="Total Nilai Sementara (PG + Uraian)">
+            <span class="pill-dot" aria-hidden="true"></span>
+            <span id="topbar-score-text">Nilai: 0 / 100</span>
+          </div>
+
+          <button type="button" id="topbar-report-btn" class="btn btn-secondary btn-sm">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span>Rapor & Kunci</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Primary Navigation Tabs -->
+      <nav class="nav-tabs-bar" aria-label="Navigasi Utama">
+        <div class="container nav-tabs-inner">
+          <button type="button" class="nav-tab is-active" data-view="reading">
+            <span class="nav-tab-badge">Bagian I</span>
+            <span>Ringkasan Materi</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="quiz-pg">
+            <span class="nav-tab-badge">25 Soal</span>
+            <span>Latihan Pilihan Ganda</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="quiz-essay">
+            <span class="nav-tab-badge">8 Soal</span>
+            <span>Soal Uraian Analitis</span>
+          </button>
+          <button type="button" class="nav-tab" data-view="report">
+            <span class="nav-tab-badge">Bagian III</span>
+            <span>Rapor & Kunci Jawaban</span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main class="main-content container">
+      <!-- VIEW 1: RINGKASAN MATERI -->
+      <section id="view-reading" class="view-panel">
+        <div class="hero-card">
+          <div class="hero-eyebrow">Bahan Bacaan & Persiapan PAS • IPS Kelas VIII (Fase D)</div>
+          <h1 class="hero-title">Mobilitas Sosial &amp; Pergerakan Nasional Menuju Proklamasi 1945</h1>
+          <p class="hero-desc" id="meta-guide-text"></p>
+          <div class="hero-actions">
+            <button type="button" class="btn btn-primary" data-jump-topic="topik-1">Topik 1: Mobilitas Sosial</button>
+            <button type="button" class="btn btn-secondary" data-jump-topic="topik-3">Topik 3: Pergerakan Nasional</button>
+            <button type="button" class="btn btn-ghost" id="hero-start-pg-btn">Mulai Kuis 25 PG &rarr;</button>
+          </div>
+        </div>
+
+        <!-- Topic Switcher & Glossary Layout -->
+        <div class="reading-layout">
+          <div class="reading-main">
+            <div class="topic-switcher no-print">
+              <button type="button" class="topic-pill is-active" data-topic="topik-1">
+                <strong>Topik 1</strong>
+                <span>Mobilitas Sosial</span>
+              </button>
+              <button type="button" class="topic-pill" data-topic="topik-3">
+                <strong>Topik 3</strong>
+                <span>Pergerakan Nasional &amp; Proklamasi 1945</span>
+              </button>
+            </div>
+
+            <!-- Dynamic Topic Content -->
+            <article id="topic-content-container" class="topic-article"></article>
+          </div>
+
+          <!-- Sticky Glossary & Quick Concept Sidebar -->
+          <aside class="reading-sidebar">
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">
+                <span class="sidebar-badge">Kamus Konsep</span>
+                <h3>Istilah Penting</h3>
+              </div>
+              <p class="sidebar-hint">Klik istilah yang disorot di bacaan atau pilih daftar di bawah untuk melihat artinya.</p>
+              <div id="glossary-detail-box" class="glossary-detail-box">
+                <strong id="glossary-term-title">Pilih Istilah</strong>
+                <span id="glossary-term-cat" class="glossary-cat"></span>
+                <p id="glossary-term-def">Klik salah satu istilah berwarna hijau toska di teks bacaan untuk memunculkan penjelasan ringkasnya di sini.</p>
+              </div>
+              <div id="glossary-chip-list" class="glossary-chip-list"></div>
+            </div>
+
+            <div class="sidebar-card sidebar-card-amber">
+              <div class="sidebar-card-header">
+                <span class="sidebar-badge badge-amber">Bobot Nilai PAS</span>
+                <h3>Skema Penilaian</h3>
+              </div>
+              <ul class="score-scheme-list">
+                <li><span>25 Soal Pilihan Ganda (@ 2 poin)</span><strong>50 Poin</strong></li>
+                <li><span>8 Soal Uraian Analitis (kumulatif)</span><strong>50 Poin</strong></li>
+                <li class="scheme-total"><span>Total Nilai Akhir PAS</span><strong>100 Poin</strong></li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- VIEW 2: LATIHAN PILIHAN GANDA (25 SOAL) -->
+      <section id="view-quiz-pg" class="view-panel hidden">
+        <div class="section-header-bar">
+          <div>
+            <span class="eyebrow-tag">Bagian II.A • Soal Pilihan Ganda (HOTS)</span>
+            <h2>Simulasi Kuis 25 Soal Pilihan Ganda</h2>
+          </div>
+          <div class="quiz-controls-row no-print">
+            <div class="mode-toggle" role="group" aria-label="Mode Kuis">
+              <button type="button" class="mode-btn is-active" data-quiz-mode="practice">Mode Latihan (Langsung Cek)</button>
+              <button type="button" class="mode-btn" data-quiz-mode="exam">Mode Ujian PAS</button>
+            </div>
+            <button type="button" id="reset-pg-btn" class="btn btn-ghost btn-sm">Ulangi Kuis</button>
+          </div>
+        </div>
+
+        <!-- Progress & Filter Bar -->
+        <div class="quiz-status-bar">
+          <div class="filter-group">
+            <button type="button" class="filter-chip is-active" data-pg-filter="all">Semua (25)</button>
+            <button type="button" class="filter-chip" data-pg-filter="Topik 1">Topik 1 (1–10)</button>
+            <button type="button" class="filter-chip" data-pg-filter="Topik 3">Topik 3 (11–25)</button>
+          </div>
+          <div class="quiz-metrics">
+            <span id="pg-answered-count">Terjawab: 0 / 25</span>
+            <span class="metric-sep">&bull;</span>
+            <strong id="pg-score-badge">Skor PG: 0 / 50</strong>
+          </div>
+        </div>
+
+        <div class="pg-workspace">
+          <!-- Question Navigator Grid -->
+          <aside class="pg-nav-card no-print">
+            <h4>Navigasi Nomor</h4>
+            <div id="pg-nav-grid" class="pg-nav-grid"></div>
+            <div class="pg-nav-legend">
+              <span><i class="dot dot-answered"></i> Terjawab</span>
+              <span><i class="dot dot-correct"></i> Benar</span>
+              <span><i class="dot dot-wrong"></i> Salah</span>
+            </div>
+            <button type="button" id="submit-exam-btn" class="btn btn-primary btn-full hidden">Selesaikan &amp; Nilai Ujian</button>
+          </aside>
+
+          <!-- Question List / Active Questions -->
+          <div id="pg-questions-container" class="pg-questions-container"></div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: SOAL URAIAN ANALITIS (8 SOAL) -->
+      <section id="view-quiz-essay" class="view-panel hidden">
+        <div class="section-header-bar">
+          <div>
+            <span class="eyebrow-tag">Bagian II.B • Soal Uraian Analitis</span>
+            <h2>Latihan 8 Soal Uraian &amp; Rubrik Penskoran</h2>
+          </div>
+          <div class="quiz-metrics">
+            <span id="essay-filled-count">Terisi: 0 / 8</span>
+            <span class="metric-sep">&bull;</span>
+            <strong id="essay-score-badge">Skor Uraian: 0 / 50</strong>
+          </div>
+        </div>
+
+        <div class="info-banner">
+          <p><strong>Petunjuk:</strong> Tuliskan jawaban analisismu pada kolom yang tersedia (tersimpan otomatis di browser). Setelah menjawab, klik <strong>"Lihat Pedoman Jawaban &amp; Rubrik"</strong> untuk mencocokkan jawabanmu dan memasukkan skor mandiri sesuai bobot masing-masing soal.</p>
+        </div>
+
+        <div id="essay-questions-container" class="essay-questions-container"></div>
+      </section>
+
+      <!-- VIEW 4: RAPOR & KUNCI JAWABAN -->
+      <section id="view-report" class="view-panel hidden">
+        <div class="section-header-bar no-print">
+          <div>
+            <span class="eyebrow-tag">Bagian III • Rekap Nilai &amp; Pembahasan</span>
+            <h2>Rapor Persiapan PAS &amp; Kunci Jawaban Lengkap</h2>
+          </div>
+          <div class="quiz-controls-row">
+            <button type="button" id="print-report-btn" class="btn btn-primary btn-sm">Cetak / Simpan PDF</button>
+          </div>
+        </div>
+
+        <div class="report-summary-card">
+          <div class="report-student-meta">
+            <div>
+              <span class="meta-label">Nama Peserta Didik</span>
+              <strong id="report-student-name">Belum diisi</strong>
+            </div>
+            <div>
+              <span class="meta-label">Mata Pelajaran</span>
+              <strong>IPS Kelas VIII (Fase D)</strong>
+            </div>
+            <div>
+              <span class="meta-label">Predikat Kesiapan</span>
+              <strong id="report-predicate" class="predicate-badge">-</strong>
+            </div>
+          </div>
+
+          <div class="report-kpi-row">
+            <div class="kpi-box">
+              <span>Skor Pilihan Ganda (25 Soal)</span>
+              <strong id="report-pg-score">0 / 50</strong>
+              <small id="report-pg-detail">0 benar dari 25 soal</small>
+            </div>
+            <div class="kpi-box">
+              <span>Skor Uraian (8 Soal)</span>
+              <strong id="report-essay-score">0 / 50</strong>
+              <small id="report-essay-detail">Penilaian mandiri berbasis rubrik</small>
+            </div>
+            <div class="kpi-box kpi-total">
+              <span>Nilai Akhir PAS</span>
+              <strong id="report-total-score">0 / 100</strong>
+              <small>Rumus: Skor PG + Skor Uraian</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Complete Answer Key Table -->
+        <div class="answer-key-card">
+          <h3>Kunci Jawaban Soal Pilihan Ganda (Nomor 1–25)</h3>
+          <div id="answer-key-grid" class="answer-key-grid"></div>
+        </div>
+
+        <div class="answer-key-card">
+          <h3>Pedoman Jawaban &amp; Rubrik Soal Uraian (Nomor 1–8)</h3>
+          <div id="essay-rubric-summary" class="essay-rubric-summary"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
