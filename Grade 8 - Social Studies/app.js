@@ -16,11 +16,26 @@
     quizMode: "practice", // 'practice' | 'exam'
     pgFilter: "all",      // 'all' | 'Topik 1' | 'Topik 3'
     examSubmitted: false,
-    pgAnswers: {},        // { [questionId]: optionIndex }
+    pgAnswers: {},        // { [questionId]: optionIndex } (Mode Latihan)
+    examAnswers: {},      // { [questionId]: optionIndex } (Mode Ujian PAS)
+    examOrder: [],        // shuffled question IDs for Mode Ujian PAS
     essayAnswers: {},     // { [questionId]: string }
     essayScores: {},      // { [questionId]: number }
     revealedRubrics: {}   // { [questionId]: boolean }
   };
+
+  function shuffleIds(ids) {
+    const arr = [...ids];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function isPracticeComplete() {
+    return DATA.mcQuestions.every((q) => typeof state.pgAnswers[q.id] === "number");
+  }
 
   let state = loadState();
 
@@ -63,10 +78,11 @@
 
   // Score Calculations
   function calculatePgMetrics() {
+    const answersMap = state.quizMode === "exam" ? state.examAnswers : state.pgAnswers;
     let answered = 0;
     let correct = 0;
     DATA.mcQuestions.forEach((q) => {
-      const sel = state.pgAnswers[q.id];
+      const sel = answersMap[q.id];
       if (typeof sel === "number") {
         answered += 1;
         if (sel === q.correctIndex) correct += 1;
@@ -277,9 +293,29 @@
   }
 
   // Render PG Quiz View
+  function getOrderedMcQuestions() {
+    if (state.quizMode === "exam") {
+      if (!Array.isArray(state.examOrder) || state.examOrder.length !== DATA.mcQuestions.length) {
+        state.examOrder = shuffleIds(DATA.mcQuestions.map((q) => q.id));
+        saveState();
+      }
+      const byId = new Map(DATA.mcQuestions.map((q) => [q.id, q]));
+      return state.examOrder.map((id) => byId.get(id)).filter(Boolean);
+    }
+    return DATA.mcQuestions;
+  }
+
   function renderPgQuiz() {
+    const practiceDone = isPracticeComplete();
+    if (state.quizMode === "exam" && !practiceDone) {
+      state.quizMode = "practice";
+      saveState();
+    }
+
     const pg = calculatePgMetrics();
     const canReveal = state.quizMode === "practice" || state.examSubmitted;
+    const answersMap = state.quizMode === "exam" ? state.examAnswers : state.pgAnswers;
+    const orderedQuestions = getOrderedMcQuestions();
 
     document.getElementById("pg-answered-count").textContent = `Terjawab: ${pg.answered} / ${DATA.mcQuestions.length}`;
     document.getElementById("pg-score-badge").textContent = canReveal
@@ -290,7 +326,18 @@
     submitExamBtn.classList.toggle("hidden", state.quizMode !== "exam" || state.examSubmitted);
 
     document.querySelectorAll("[data-quiz-mode]").forEach((btn) => {
-      btn.classList.toggle("is-active", btn.dataset.quizMode === state.quizMode);
+      const mode = btn.dataset.quizMode;
+      btn.classList.toggle("is-active", mode === state.quizMode);
+      if (mode === "exam") {
+        btn.disabled = !practiceDone;
+        btn.classList.toggle("is-locked", !practiceDone);
+        btn.title = practiceDone
+          ? "Mulai Mode Ujian PAS (soal diacak)"
+          : "Jawab semua 25 soal di Mode Latihan terlebih dahulu";
+        btn.textContent = practiceDone
+          ? "Mode Ujian PAS (Acak)"
+          : `Mode Ujian PAS (${Object.keys(state.pgAnswers).length}/25 Latihan)`;
+      }
     });
 
     document.querySelectorAll("[data-pg-filter]").forEach((btn) => {
@@ -299,9 +346,10 @@
 
     // Navigator Grid
     const navGrid = document.getElementById("pg-nav-grid");
-    navGrid.innerHTML = DATA.mcQuestions
-      .map((q) => {
-        const sel = state.pgAnswers[q.id];
+    navGrid.innerHTML = orderedQuestions
+      .map((q, idx) => {
+        const displayNum = state.quizMode === "exam" ? idx + 1 : q.id;
+        const sel = answersMap[q.id];
         let cls = "";
         if (typeof sel === "number") {
           if (canReveal) {
@@ -310,20 +358,20 @@
             cls = "is-answered";
           }
         }
-        return `<button type="button" class="pg-num-btn ${cls}" data-scroll-q="${q.id}">${q.id}</button>`;
+        return `<button type="button" class="pg-num-btn ${cls}" data-scroll-q="${q.id}">${displayNum}</button>`;
       })
       .join("");
 
     // Filtered Questions
-    const filtered = DATA.mcQuestions.filter((q) =>
-      state.pgFilter === "all" ? true : q.topic === state.pgFilter
-    );
+    const filtered = orderedQuestions
+      .map((q, idx) => ({ q, displayNum: state.quizMode === "exam" ? idx + 1 : q.id }))
+      .filter(({ q }) => (state.pgFilter === "all" ? true : q.topic === state.pgFilter));
 
     const letters = ["A", "B", "C", "D"];
     const qContainer = document.getElementById("pg-questions-container");
     qContainer.innerHTML = filtered
-      .map((q) => {
-        const sel = state.pgAnswers[q.id];
+      .map(({ q, displayNum }) => {
+        const sel = answersMap[q.id];
         const hasAnswered = typeof sel === "number";
         const isCorrect = hasAnswered && sel === q.correctIndex;
 
@@ -358,7 +406,7 @@
         return `
           <article class="question-card" id="pg-q-${q.id}">
             <div class="question-head">
-              <span class="q-num-badge">Soal ${q.id}</span>
+              <span class="q-num-badge">Soal ${displayNum}</span>
               <span class="q-topic-tag">${escapeHtml(q.topic)}</span>
             </div>
             <p class="question-text">${escapeHtml(q.question)}</p>
@@ -463,7 +511,14 @@
     // PG Quiz interactions
     document.querySelectorAll("[data-quiz-mode]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.quizMode = btn.dataset.quizMode;
+        const targetMode = btn.dataset.quizMode;
+        if (targetMode === "exam") {
+          if (!isPracticeComplete()) return;
+          if (!Array.isArray(state.examOrder) || state.examOrder.length !== DATA.mcQuestions.length) {
+            state.examOrder = shuffleIds(DATA.mcQuestions.map((q) => q.id));
+          }
+        }
+        state.quizMode = targetMode;
         saveState();
         renderPgQuiz();
       });
@@ -478,8 +533,13 @@
     });
 
     document.getElementById("reset-pg-btn").addEventListener("click", () => {
-      state.pgAnswers = {};
-      state.examSubmitted = false;
+      if (state.quizMode === "exam") {
+        state.examAnswers = {};
+        state.examSubmitted = false;
+        state.examOrder = shuffleIds(DATA.mcQuestions.map((q) => q.id));
+      } else {
+        state.pgAnswers = {};
+      }
       saveState();
       renderPgQuiz();
     });
@@ -508,7 +568,11 @@
       if (state.quizMode === "exam" && state.examSubmitted) return;
       const qId = Number(btn.dataset.qId);
       const optIdx = Number(btn.dataset.optIdx);
-      state.pgAnswers[qId] = optIdx;
+      if (state.quizMode === "exam") {
+        state.examAnswers[qId] = optIdx;
+      } else {
+        state.pgAnswers[qId] = optIdx;
+      }
       saveState();
       renderPgQuiz();
     });

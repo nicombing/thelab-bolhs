@@ -904,6 +904,12 @@ button, input, textarea {
   box-shadow: var(--shadow-sm);
 }
 
+.mode-btn:disabled,
+.mode-btn.is-locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .quiz-status-bar {
   display: flex;
   align-items: center;
