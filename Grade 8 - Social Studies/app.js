@@ -7,7 +7,7 @@
   const DEFAULT_STATE = {
     studentName: "",
     activeView: "reading",
-    activeTopicId: "topik-1",
+    activeTopicId: "all",
     quizMode: "practice", // 'practice' | 'exam'
     pgFilter: "all",      // 'all' | 'Topik 1' | 'Topik 3'
     examSubmitted: false,
@@ -96,20 +96,19 @@
 
   // View Switching
   function setActiveView(viewName) {
-    state.activeView = viewName;
+    const validViews = ["reading", "quiz-pg", "quiz-essay"];
+    const nextView = validViews.includes(viewName) ? viewName : "reading";
+    state.activeView = nextView;
     saveState();
 
     document.querySelectorAll(".view-panel").forEach((el) => {
-      el.classList.toggle("hidden", el.id !== `view-${viewName}`);
+      el.classList.toggle("hidden", el.id !== `view-${nextView}`);
     });
 
     document.querySelectorAll(".nav-tab").forEach((btn) => {
-      btn.classList.toggle("is-active", btn.dataset.view === viewName);
+      btn.classList.toggle("is-active", btn.dataset.view === nextView);
     });
 
-    if (viewName === "report") {
-      renderReportView();
-    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -135,116 +134,125 @@
   }
 
   function renderTopic(topicId) {
-    state.activeTopicId = topicId;
+    const nextTopic = topicId || "all";
+    state.activeTopicId = nextTopic;
     saveState();
 
     document.querySelectorAll(".topic-pill").forEach((btn) => {
-      btn.classList.toggle("is-active", btn.dataset.topic === topicId);
+      btn.classList.toggle("is-active", btn.dataset.topic === nextTopic);
     });
 
-    const topic = DATA.topics.find((t) => t.id === topicId) || DATA.topics[0];
+    const topicsToRender =
+      nextTopic === "all"
+        ? DATA.topics
+        : DATA.topics.filter((t) => t.id === nextTopic);
+
     const container = document.getElementById("topic-content-container");
+    container.innerHTML = topicsToRender
+      .map((topic) => {
+        const sectionsHtml = topic.sections
+          .map((sec) => {
+            let bodyHtml = "";
 
-    const sectionsHtml = topic.sections
-      .map((sec) => {
-        let bodyHtml = "";
+            if (sec.paragraphs) {
+              bodyHtml += sec.paragraphs
+                .map((p) => `<p>${formatWithGlossary(p)}</p>`)
+                .join("");
+            }
 
-        if (sec.paragraphs) {
-          bodyHtml += sec.paragraphs
-            .map((p) => `<p>${formatWithGlossary(p)}</p>`)
-            .join("");
-        }
+            if (sec.cards) {
+              bodyHtml += `<div class="concept-cards-grid">${sec.cards
+                .map(
+                  (c) => `
+                  <div class="concept-card tone-${escapeHtml(c.tone)}">
+                    <span class="concept-tag">${escapeHtml(c.tag)}</span>
+                    <h4>${escapeHtml(c.title)}</h4>
+                    <p>${escapeHtml(c.desc)}</p>
+                    <div class="concept-example">${escapeHtml(c.example)}</div>
+                  </div>`
+                )
+                .join("")}</div>`;
+            }
 
-        if (sec.cards) {
-          bodyHtml += `<div class="concept-cards-grid">${sec.cards
-            .map(
-              (c) => `
-              <div class="concept-card tone-${escapeHtml(c.tone)}">
-                <span class="concept-tag">${escapeHtml(c.tag)}</span>
-                <h4>${escapeHtml(c.title)}</h4>
-                <p>${escapeHtml(c.desc)}</p>
-                <div class="concept-example">${escapeHtml(c.example)}</div>
-              </div>`
-            )
-            .join("")}</div>`;
-        }
+            if (sec.bullets) {
+              bodyHtml += `<ul class="channel-list">${sec.bullets
+                .map(
+                  (b) => `
+                  <li class="channel-item">
+                    <strong>${escapeHtml(b.title)}</strong>
+                    <span>${formatWithGlossary(b.text)}</span>
+                  </li>`
+                )
+                .join("")}</ul>`;
+            }
 
-        if (sec.bullets) {
-          bodyHtml += `<ul class="channel-list">${sec.bullets
-            .map(
-              (b) => `
-              <li class="channel-item">
-                <strong>${escapeHtml(b.title)}</strong>
-                <span>${formatWithGlossary(b.text)}</span>
-              </li>`
-            )
-            .join("")}</ul>`;
-        }
+            if (sec.twoCol) {
+              bodyHtml += `
+                <div class="two-col-grid">
+                  <div class="factor-box tone-${escapeHtml(sec.twoCol.leftTone)}">
+                    <h4>${escapeHtml(sec.twoCol.leftTitle)}</h4>
+                    <ul>${sec.twoCol.leftItems.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
+                  </div>
+                  <div class="factor-box tone-${escapeHtml(sec.twoCol.rightTone)}">
+                    <h4>${escapeHtml(sec.twoCol.rightTitle)}</h4>
+                    <ul>${sec.twoCol.rightItems.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
+                  </div>
+                </div>`;
+            }
 
-        if (sec.twoCol) {
-          bodyHtml += `
-            <div class="two-col-grid">
-              <div class="factor-box tone-${escapeHtml(sec.twoCol.leftTone)}">
-                <h4>${escapeHtml(sec.twoCol.leftTitle)}</h4>
-                <ul>${sec.twoCol.leftItems.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
-              </div>
-              <div class="factor-box tone-${escapeHtml(sec.twoCol.rightTone)}">
-                <h4>${escapeHtml(sec.twoCol.rightTitle)}</h4>
-                <ul>${sec.twoCol.rightItems.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
-              </div>
-            </div>`;
-        }
+            if (sec.table) {
+              bodyHtml += `
+                <div class="table-wrap">
+                  <table class="compare-table">
+                    <thead>
+                      <tr>${sec.table.headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr>
+                    </thead>
+                    <tbody>
+                      ${sec.table.rows
+                        .map(
+                          (row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`
+                        )
+                        .join("")}
+                    </tbody>
+                  </table>
+                </div>`;
+            }
 
-        if (sec.table) {
-          bodyHtml += `
-            <div class="table-wrap">
-              <table class="compare-table">
-                <thead>
-                  <tr>${sec.table.headers.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr>
-                </thead>
-                <tbody>
-                  ${sec.table.rows
-                    .map(
-                      (row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`
-                    )
-                    .join("")}
-                </tbody>
-              </table>
-            </div>`;
-        }
+            if (sec.timeline) {
+              bodyHtml += `<div class="timeline-list">${sec.timeline
+                .map(
+                  (item) => `
+                  <div class="timeline-item">
+                    <span class="timeline-date">${escapeHtml(item.date)}</span>
+                    <h4>${escapeHtml(item.title)}</h4>
+                    <p>${formatWithGlossary(item.text)}</p>
+                  </div>`
+                )
+                .join("")}</div>`;
+            }
 
-        if (sec.timeline) {
-          bodyHtml += `<div class="timeline-list">${sec.timeline
-            .map(
-              (item) => `
-              <div class="timeline-item">
-                <span class="timeline-date">${escapeHtml(item.date)}</span>
-                <h4>${escapeHtml(item.title)}</h4>
-                <p>${formatWithGlossary(item.text)}</p>
-              </div>`
-            )
-            .join("")}</div>`;
-        }
+            return `
+              <section class="topic-section">
+                <h3>${escapeHtml(sec.heading)}</h3>
+                ${bodyHtml}
+              </section>`;
+          })
+          .join("");
 
         return `
-          <section class="topic-section">
-            <h3>${escapeHtml(sec.heading)}</h3>
-            ${bodyHtml}
-          </section>`;
+          <article class="topic-article" id="topic-${escapeHtml(topic.id)}">
+            <header class="topic-header">
+              <div class="topic-meta-row">
+                <span class="topic-badge">${escapeHtml(topic.badge)}</span>
+                <span class="topic-read-time">${escapeHtml(topic.readTime)}</span>
+              </div>
+              <h2>${escapeHtml(topic.title)}</h2>
+              <p class="topic-summary">${escapeHtml(topic.summary)}</p>
+            </header>
+            ${sectionsHtml}
+          </article>`;
       })
       .join("");
-
-    container.innerHTML = `
-      <header class="topic-header">
-        <div class="topic-meta-row">
-          <span class="topic-badge">${escapeHtml(topic.badge)}</span>
-          <span class="topic-read-time">${escapeHtml(topic.readTime)}</span>
-        </div>
-        <h2>${escapeHtml(topic.title)}</h2>
-        <p class="topic-summary">${escapeHtml(topic.summary)}</p>
-      </header>
-      ${sectionsHtml}
-    `;
   }
 
   // Render PG Quiz View
@@ -394,47 +402,6 @@
     updateTopbarScore();
   }
 
-  // Render Report & Answer Key View
-  function renderReportView() {
-    const pg = calculatePgMetrics();
-    const essay = calculateEssayMetrics();
-    const total = pg.score + essay.score;
-
-    let predicate = "Perlu Pendalaman Materi";
-    if (total >= 90) predicate = "Sangat Baik (Siap PAS!)";
-    else if (total >= 75) predicate = "Baik (Tuntas)";
-    else if (total >= 60) predicate = "Cukup (Review Kembali)";
-
-    document.getElementById("report-student-name").textContent = state.studentName.trim() || "Belum diisi";
-    document.getElementById("report-predicate").textContent = predicate;
-    document.getElementById("report-pg-score").textContent = `${pg.score} / 50`;
-    document.getElementById("report-pg-detail").textContent = `${pg.correct} benar dari ${DATA.mcQuestions.length} soal`;
-    document.getElementById("report-essay-score").textContent = `${essay.score} / 50`;
-    document.getElementById("report-essay-detail").textContent = `Skor mentah rubrik: ${essay.rawScore} / ${essay.rawMax} (bobot 50%)`;
-    document.getElementById("report-total-score").textContent = `${total} / 100`;
-
-    const letters = ["A", "B", "C", "D"];
-    document.getElementById("answer-key-grid").innerHTML = DATA.mcQuestions
-      .map(
-        (q) => `
-        <div class="key-item">
-          <strong>${q.id}. ${letters[q.correctIndex]}</strong>
-          <span>(${escapeHtml(q.keyNote)})</span>
-        </div>`
-      )
-      .join("");
-
-    document.getElementById("essay-rubric-summary").innerHTML = DATA.essayQuestions
-      .map(
-        (q) => `
-        <div class="rubric-summary-item">
-          <strong>Soal ${q.id} (Skor Maks: ${q.maxScore}) — ${escapeHtml(q.topic)}</strong>
-          <p>${escapeHtml(q.rubric)}</p>
-        </div>`
-      )
-      .join("");
-  }
-
   // Event Listeners
   function bindEvents() {
     const nameInput = document.getElementById("student-name-input");
@@ -445,9 +412,7 @@
     });
 
     document.getElementById("brand-home-btn").addEventListener("click", () => setActiveView("reading"));
-    document.getElementById("topbar-report-btn").addEventListener("click", () => setActiveView("report"));
     document.getElementById("hero-start-pg-btn").addEventListener("click", () => setActiveView("quiz-pg"));
-    document.getElementById("print-report-btn").addEventListener("click", () => window.print());
 
     document.querySelectorAll(".nav-tab").forEach((btn) => {
       btn.addEventListener("click", () => setActiveView(btn.dataset.view));
@@ -455,8 +420,10 @@
 
     document.querySelectorAll("[data-jump-topic]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        renderTopic(btn.dataset.jumpTopic);
-        document.getElementById("topic-content-container").scrollIntoView({ behavior: "smooth" });
+        const targetId = btn.dataset.jumpTopic;
+        renderTopic(targetId);
+        const el = document.getElementById(`topic-${targetId}`);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       });
     });
 

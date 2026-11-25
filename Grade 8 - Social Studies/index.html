@@ -46,16 +46,6 @@
             <span class="pill-dot" aria-hidden="true"></span>
             <span id="topbar-score-text">Nilai: 0 / 100</span>
           </div>
-
-          <button type="button" id="topbar-report-btn" class="btn btn-secondary btn-sm">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="16" y1="13" x2="8" y2="13"/>
-              <line x1="16" y1="17" x2="8" y2="17"/>
-            </svg>
-            <span>Rapor & Kunci</span>
-          </button>
         </div>
       </div>
 
@@ -73,10 +63,6 @@
           <button type="button" class="nav-tab" data-view="quiz-essay">
             <span class="nav-tab-badge">8 Soal</span>
             <span>Soal Uraian Analitis</span>
-          </button>
-          <button type="button" class="nav-tab" data-view="report">
-            <span class="nav-tab-badge">Bagian III</span>
-            <span>Rapor & Kunci Jawaban</span>
           </button>
         </div>
       </nav>
@@ -100,7 +86,11 @@
         <div class="reading-layout">
           <div class="reading-main">
             <div class="topic-switcher no-print">
-              <button type="button" class="topic-pill is-active" data-topic="topik-1">
+              <button type="button" class="topic-pill is-active" data-topic="all">
+                <strong>Semua</strong>
+                <span>Topik 1 &amp; Topik 3</span>
+              </button>
+              <button type="button" class="topic-pill" data-topic="topik-1">
                 <strong>Topik 1</strong>
                 <span>Mobilitas Sosial</span>
               </button>
@@ -111,7 +101,7 @@
             </div>
 
             <!-- Dynamic Topic Content -->
-            <article id="topic-content-container" class="topic-article"></article>
+            <div id="topic-content-container" class="topics-stack"></div>
           </div>
 
           <!-- Sticky Glossary & Quick Concept Sidebar -->
@@ -212,65 +202,6 @@
         </div>
 
         <div id="essay-questions-container" class="essay-questions-container"></div>
-      </section>
-
-      <!-- VIEW 4: RAPOR & KUNCI JAWABAN -->
-      <section id="view-report" class="view-panel hidden">
-        <div class="section-header-bar no-print">
-          <div>
-            <span class="eyebrow-tag">Bagian III • Rekap Nilai &amp; Pembahasan</span>
-            <h2>Rapor Persiapan PAS &amp; Kunci Jawaban Lengkap</h2>
-          </div>
-          <div class="quiz-controls-row">
-            <button type="button" id="print-report-btn" class="btn btn-primary btn-sm">Cetak / Simpan PDF</button>
-          </div>
-        </div>
-
-        <div class="report-summary-card">
-          <div class="report-student-meta">
-            <div>
-              <span class="meta-label">Nama Peserta Didik</span>
-              <strong id="report-student-name">Belum diisi</strong>
-            </div>
-            <div>
-              <span class="meta-label">Mata Pelajaran</span>
-              <strong>IPS Kelas VIII (Fase D)</strong>
-            </div>
-            <div>
-              <span class="meta-label">Predikat Kesiapan</span>
-              <strong id="report-predicate" class="predicate-badge">-</strong>
-            </div>
-          </div>
-
-          <div class="report-kpi-row">
-            <div class="kpi-box">
-              <span>Skor Pilihan Ganda (25 Soal)</span>
-              <strong id="report-pg-score">0 / 50</strong>
-              <small id="report-pg-detail">0 benar dari 25 soal</small>
-            </div>
-            <div class="kpi-box">
-              <span>Skor Uraian (8 Soal)</span>
-              <strong id="report-essay-score">0 / 50</strong>
-              <small id="report-essay-detail">Penilaian mandiri berbasis rubrik</small>
-            </div>
-            <div class="kpi-box kpi-total">
-              <span>Nilai Akhir PAS</span>
-              <strong id="report-total-score">0 / 100</strong>
-              <small>Rumus: Skor PG + Skor Uraian</small>
-            </div>
-          </div>
-        </div>
-
-        <!-- Complete Answer Key Table -->
-        <div class="answer-key-card">
-          <h3>Kunci Jawaban Soal Pilihan Ganda (Nomor 1–25)</h3>
-          <div id="answer-key-grid" class="answer-key-grid"></div>
-        </div>
-
-        <div class="answer-key-card">
-          <h3>Pedoman Jawaban &amp; Rubrik Soal Uraian (Nomor 1–8)</h3>
-          <div id="essay-rubric-summary" class="essay-rubric-summary"></div>
-        </div>
       </section>
     </main>
   </div>

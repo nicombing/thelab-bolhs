@@ -438,12 +438,18 @@ button, input, textarea {
   box-shadow: var(--shadow-sm);
 }
 
+.topics-stack {
+  display: grid;
+  gap: 24px;
+}
+
 .topic-article {
   background: var(--bg-surface);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
   padding: 28px;
   box-shadow: var(--shadow-sm);
+  scroll-margin-top: 140px;
 }
 
 .topic-header {
