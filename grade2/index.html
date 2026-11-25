@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Grade 2 Personal Worksheet — Routines, Tasks &amp; Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/grade2/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Sticky Bar -->
+    <header class="topbar no-print">
+      <div class="container topbar-inner">
+        <button type="button" id="brand-home-btn" class="brand" aria-label="Go to Home">
+          <span class="brand-mark" id="brand-mascot-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 6.5A2.5 2.5 0 0 1 7.5 4H14a4 4 0 0 1 2 4v18a3 3 0 0 0-3-3H7.5A2.5 2.5 0 0 1 5 20.5v-14Z"/>
+              <path d="M27 6.5A2.5 2.5 0 0 0 24.5 4H18a4 4 0 0 0-2 4v18a3 3 0 0 1 3-3h5.5A2.5 2.5 0 0 0 27 20.5v-14Z"/>
+            </svg>
+          </span>
+          <span class="brand-text">
+            <strong id="brand-student-title">Grade 2 Explorer</strong>
+            <small>My Routines, Tasks &amp; Projects</small>
+          </span>
+        </button>
+
+        <nav class="pillar-nav" id="pillar-nav" aria-label="Main worksheet sections">
+          <button type="button" class="nav-tab is-active" data-nav="home">Home</button>
+          <button type="button" class="nav-tab" data-nav="routines">Routines</button>
+          <button type="button" class="nav-tab" data-nav="tasks">Tasks</button>
+          <button type="button" class="nav-tab" data-nav="projects">Projects</button>
+        </nav>
+
+        <div class="topbar-actions">
+          <div class="star-bank-pill" id="star-bank-pill" aria-live="polite" title="Total Stars Earned">
+            <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.4l2.9 5.9 6.5.9-4.7 4.6 1.1 6.5L12 17.2l-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9L12 2.4z"/>
+            </svg>
+            <span id="star-bank-count">0 Stars</span>
+          </div>
+
+          <button type="button" id="open-report-btn" class="btn btn-secondary btn-sm">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+            <span>My Book</span>
+          </button>
+
+          <button type="button" id="open-parent-btn" class="parent-mini-btn" title="Parent / Teacher Panel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Parent / Teacher</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- VIEW 1: PERSONALIZED HOME HUB -->
+      <section id="home-view" class="home-view container">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <div class="eyebrow">
+              <span class="eyebrow-badge" id="home-grade-badge">Grade 2 Personal Worksheet</span>
+              <span class="eyebrow-meta" id="home-date-label">Today</span>
+            </div>
+            <h1 id="home-greeting-title">Hi, Little Explorer! Ready for Today?</h1>
+            <p class="hero-desc" id="home-greeting-desc">
+              Check off your daily <strong>Routines</strong>, try a fun interactive <strong>Task</strong>, and build your step-by-step <strong>Projects</strong>. Every little step earns bright stars!
+            </p>
+            <div class="hero-stats-grid">
+              <div class="stat-box">
+                <span class="stat-label">Today's Routines</span>
+                <strong class="stat-value" id="home-routine-stat">0 / 0</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Tasks Finished</span>
+                <strong class="stat-value" id="home-tasks-stat">0 / 4</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Project Steps</span>
+                <strong class="stat-value" id="home-projects-stat">0 / 8</strong>
+              </div>
+              <div class="stat-box">
+                <span class="stat-label">Explorer Level</span>
+                <strong class="stat-value stat-rank" id="home-rank-label">Curious Sprout</strong>
+              </div>
+            </div>
+          </div>
+
+          <aside class="hero-mascot-card" aria-label="Student companion and daily progress">
+            <div class="mascot-badge-circle" id="home-mascot-svg" aria-hidden="true"></div>
+            <h2 id="home-mascot-name">My Learning Buddy</h2>
+            <p id="home-mascot-tip">Tap a card below to start! You can also click "Read Aloud" on any worksheet to listen.</p>
+            <button type="button" id="home-tts-welcome-btn" class="btn btn-secondary btn-sm">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+              <span>Read Welcome Aloud</span>
+            </button>
+          </aside>
+        </div>
+
+        <!-- 3 Core Pillar Cards -->
+        <div class="section-heading-row">
+          <div>
+            <h2>Choose Your Worksheet Space</h2>
+            <p>Everything saves automatically right here so you can pause and come back anytime.</p>
+          </div>
+        </div>
+
+        <div class="pillars-grid" id="pillars-grid">
+          <!-- Pillar 1: Routines -->
+          <article class="pillar-card pillar-routines">
+            <div class="pillar-card-top">
+              <span class="pillar-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="24" cy="24" r="10"/>
+                  <path d="M24 6v4M24 38v4M6 24h4M38 24h4M11.3 11.3l2.8 2.8M33.9 33.9l2.8 2.8M36.7 11.3l-2.8 2.8M14.1 33.9l-2.8 2.8"/>
+                </svg>
+              </span>
+              <span class="pillar-tag tag-amber">Daily Habits</span>
+            </div>
+            <h3>1. My Daily Routines</h3>
+            <p>Check off your morning, study, and evening habits to help your garden bloom every day!</p>
+            <div class="pillar-progress-wrap">
+              <div class="pillar-progress-meta">
+                <span id="pillar-routines-label">0 of 9 done today</span>
+                <strong id="pillar-routines-pct">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-amber" id="pillar-routines-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" data-open-view="routines">Open Daily Routines</button>
+          </article>
+
+          <!-- Pillar 2: Tasks -->
+          <article class="pillar-card pillar-tasks">
+            <div class="pillar-card-top">
+              <span class="pillar-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="7" width="30" height="34" rx="5"/>
+                  <path d="M16 17h16M16 25h10M16 33h13"/>
+                  <path d="M31 24l3 3 6-7"/>
+                </svg>
+              </span>
+              <span class="pillar-tag tag-teal">Interactive Worksheets</span>
+            </div>
+            <h3>2. My Learning Tasks</h3>
+            <p>Read short picture stories, tap interactive scenes, play word games, and write 2–3 sentences.</p>
+            <div class="pillar-progress-wrap">
+              <div class="pillar-progress-meta">
+                <span id="pillar-tasks-label">0 of 4 tasks finished</span>
+                <strong id="pillar-tasks-pct">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-teal" id="pillar-tasks-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" data-open-view="tasks">Open My Tasks</button>
+          </article>
+
+          <!-- Pillar 3: Projects -->
+          <article class="pillar-card pillar-projects">
+            <div class="pillar-card-top">
+              <span class="pillar-icon-wrap" aria-hidden="true">
+                <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 36l6-22 18 6-6 22-18-6z"/>
+                  <circle cx="24" cy="24" r="4"/>
+                  <path d="M29 10l4-4 5 5-4 4"/>
+                </svg>
+              </span>
+              <span class="pillar-tag tag-emerald">Step-by-Step Builds</span>
+            </div>
+            <h3>3. My Mini Projects</h3>
+            <p>Plan, explore, draw on your own sketch pad, and build a printable Show &amp; Tell poster!</p>
+            <div class="pillar-progress-wrap">
+              <div class="pillar-progress-meta">
+                <span id="pillar-projects-label">0 of 8 steps done</span>
+                <strong id="pillar-projects-pct">0%</strong>
+              </div>
+              <div class="progress-track">
+                <div class="progress-fill fill-emerald" id="pillar-projects-bar" style="width: 0%;"></div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-block" data-open-view="projects">Open My Projects</button>
+          </article>
+        </div>
+
+        <!-- Encouragement Stickers & Notes from Parent/Teacher -->
+        <section id="home-stamps-section" class="stamps-shelf hidden" aria-labelledby="stamps-shelf-title">
+          <div class="stamps-shelf-head">
+            <h2 id="stamps-shelf-title">My Stickers &amp; Notes from Parent / Teacher</h2>
+            <span class="section-tag tag-amber">Awesome Work!</span>
+          </div>
+          <div id="home-stamps-grid" class="stamps-grid"></div>
+        </section>
+      </section>
+
+      <!-- VIEW 2: ROUTINES TRACKER -->
+      <section id="routines-view" class="routines-view container hidden" aria-live="polite">
+        <div class="view-top-banner">
+          <div>
+            <span class="section-tag tag-amber">Pillar 1 • Daily Routines</span>
+            <h1>My Daily Habit Garden</h1>
+            <p>Tap each habit when you finish it! Watch your garden grow brighter as you check off your day.</p>
+          </div>
+          <div class="routine-header-pills">
+            <div class="streak-pill" id="routine-streak-pill">0-Day Streak</div>
+            <button type="button" id="routine-read-aloud-btn" class="btn btn-secondary btn-sm">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+              <span>Read My Routines</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mon-Sun Weekly Day Picker -->
+        <div class="week-ribbon-card">
+          <div class="week-ribbon-head">
+            <strong id="routine-selected-date-label">Today</strong>
+            <span class="week-ribbon-hint">Tap any day this week to view or update your checkmarks</span>
+          </div>
+          <div id="routine-week-ribbon" class="week-ribbon" role="tablist" aria-label="Days of this week"></div>
+        </div>
+
+        <!-- Living SVG Routine Garden -->
+        <div id="routine-garden-stage" class="motion-stage routine-garden-stage"></div>
+
+        <!-- 3 Routine Groups (Morning / Learning / Evening) -->
+        <div id="routine-groups-container" class="routine-groups-grid"></div>
+
+        <!-- Daily Reading & Mood Check-In -->
+        <section class="daily-log-card">
+          <div class="daily-log-head">
+            <div>
+              <span class="section-tag tag-teal">Daily Check-In</span>
+              <h2>My Reading &amp; Feeling Log</h2>
+            </div>
+            <span id="routine-save-status" class="save-status">Saved automatically</span>
+          </div>
+
+          <div class="daily-log-grid">
+            <div class="form-field">
+              <label for="routine-book-input">Book or Story I Read Today (10+ minutes)</label>
+              <input type="text" id="routine-book-input" class="text-input" placeholder="Example: Frog and Toad, or my Grade 2 storybook...">
+            </div>
+
+            <div class="form-field">
+              <span class="field-label">How Do I Feel Today?</span>
+              <div id="routine-mood-row" class="mood-row" role="group" aria-label="Select today's mood"></div>
+            </div>
+          </div>
+
+          <div class="form-field" style="margin-top: 16px;">
+            <label for="routine-note-input">One Fun Thing I Learned or Did Today</label>
+            <textarea id="routine-note-input" class="mini-textarea" rows="2" placeholder="Today I learned..."></textarea>
+          </div>
+        </section>
+      </section>
+
+      <!-- VIEW 3: TASKS HUB -->
+      <section id="tasks-view" class="tasks-view container hidden">
+        <div class="view-top-banner">
+          <div>
+            <span class="section-tag tag-teal">Pillar 2 • Interactive Worksheets</span>
+            <h1>My Grade 2 Learning Tasks</h1>
+            <p>Each task has a moving picture story, fun practice games, and a short 2–3 sentence challenge.</p>
+          </div>
+          <div class="filter-pills" role="group" aria-label="Filter tasks">
+            <button type="button" class="filter-pill is-active" data-task-filter="all">All Tasks</button>
+            <button type="button" class="filter-pill" data-task-filter="pending">To Do</button>
+            <button type="button" class="filter-pill" data-task-filter="done">Finished</button>
+          </div>
+        </div>
+
+        <div id="tasks-grid" class="cards-grid"></div>
+      </section>
+
+      <!-- VIEW 4: ACTIVE TASK WORKSHEET -->
+      <section id="task-detail-view" class="task-detail-view container hidden" aria-live="polite">
+        <div class="mission-nav-bar no-print">
+          <button type="button" id="back-to-tasks-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>All Tasks</span>
+          </button>
+
+          <div id="task-stepper" class="mission-stepper" role="navigation" aria-label="Switch task"></div>
+
+          <a href="#task-practice-section" class="btn btn-outline btn-sm">Jump to Games</a>
+        </div>
+
+        <article class="mission-banner" id="task-banner"></article>
+        <div id="task-feedback-banner" class="teacher-stamp-banner hidden"></div>
+
+        <!-- Part 1: Reading & Motion Scene -->
+        <div class="reading-layout">
+          <div class="reading-card">
+            <div class="reading-toolbar">
+              <div class="reading-badge-group">
+                <span class="section-tag tag-teal">Part 1 • Story &amp; Clues</span>
+                <span id="task-time-pill" class="meta-pill">3 min read</span>
+              </div>
+              <div class="audio-controls" id="task-audio-controls">
+                <button type="button" id="tts-toggle-btn" class="btn btn-secondary btn-sm">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  </svg>
+                  <span id="tts-btn-label">Read Aloud</span>
+                </button>
+                <button type="button" id="tts-speed-btn" class="btn btn-ghost btn-sm" title="Switch reading speed">
+                  0.85x
+                </button>
+              </div>
+            </div>
+
+            <div class="reading-instruction">
+              Tap any <span class="vocab-sample">highlighted word</span> to hear it and see what it means!
+            </div>
+
+            <div id="task-motion-stage" class="motion-stage"></div>
+            <div id="task-reading-sections" class="reading-sections"></div>
+          </div>
+
+          <aside class="reading-sidebar">
+            <div class="sidebar-card glossary-card">
+              <div class="sidebar-card-head">
+                <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"/>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <h3>Word Explorer</h3>
+              </div>
+              <div id="glossary-active-box" class="glossary-active-box">
+                <p class="glossary-placeholder">Tap any colorful word in the story to see its kid-friendly meaning and hear how to say it!</p>
+              </div>
+              <div class="glossary-chip-list-label">Tap a Key Word:</div>
+              <div id="glossary-chips" class="glossary-chips"></div>
+            </div>
+
+            <div class="sidebar-card grammar-card" id="task-tip-card"></div>
+          </aside>
+        </div>
+
+        <!-- Part 2: Interactive Practice (Quick Check + Hands-on Game) -->
+        <section class="warmup-card" id="task-practice-section" aria-labelledby="task-practice-title">
+          <div class="warmup-head">
+            <div>
+              <span class="section-tag tag-amber">Part 2 • Fun Check &amp; Activity</span>
+              <h2 id="task-practice-title">Test What You Discovered!</h2>
+              <p>Answer the 3 quick questions and play the tap game to earn Clue Stars.</p>
+            </div>
+            <div class="warmup-score-pill" id="task-warmup-pill">0 / 3 Stars</div>
+          </div>
+
+          <div id="task-warmup-list" class="warmup-questions-list"></div>
+
+          <div class="activity-divider"></div>
+
+          <div id="task-activity-container" class="hands-on-activity"></div>
+        </section>
+
+        <!-- Part 3: Guided Mini-Response (2-3 Sentences + Optional Doodle) -->
+        <section class="challenge-card" id="task-challenge-section" aria-labelledby="task-challenge-title">
+          <div class="challenge-head">
+            <span class="section-tag tag-teal">Part 3 • My Short Answer (2–3 Sentences)</span>
+            <h2 id="task-challenge-title">Share Your Idea!</h2>
+          </div>
+
+          <div id="task-prompt-callout" class="prompt-callout"></div>
+
+          <div class="writing-workspace">
+            <div class="scaffolds-column">
+              <div class="scaffold-box">
+                <h3>Idea Checklist</h3>
+                <p class="scaffold-hint">Check off each idea as you write!</p>
+                <div id="task-outline-checklist" class="outline-checklist"></div>
+              </div>
+
+              <div class="scaffold-box">
+                <h3>Sentence Starters (Tap to Add)</h3>
+                <p class="scaffold-hint">Tap a starter to put it right into your writing box.</p>
+                <div id="task-starter-chips" class="starter-chips"></div>
+              </div>
+
+              <div class="scaffold-box">
+                <h3>Helper Words</h3>
+                <p class="scaffold-hint">Words turn green when you use them!</p>
+                <div id="task-power-words" class="power-words-grid"></div>
+              </div>
+            </div>
+
+            <div class="editor-column">
+              <div class="editor-topbar">
+                <label for="task-writing-textarea" class="editor-label">My 2–3 Sentences</label>
+                <span id="task-save-status" class="save-status">Ready to write</span>
+              </div>
+
+              <textarea
+                id="task-writing-textarea"
+                class="essay-textarea"
+                rows="7"
+                placeholder="Tap a Sentence Starter on the left or write your own 2–3 sentences here..."
+              ></textarea>
+
+              <div class="word-meter-box" id="task-word-meter-box">
+                <div class="word-meter-row">
+                  <div class="word-counter-readout">
+                    <span class="word-num" id="task-word-count">0</span>
+                    <span class="word-target">/ 20 words goal (or 2+ sentences)</span>
+                  </div>
+                  <div class="word-stats-extra">
+                    <span id="task-sentence-count">0 sentences</span>
+                    <span aria-hidden="true">•</span>
+                    <span id="task-power-count">0 helper words</span>
+                  </div>
+                </div>
+                <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="task-progress-track">
+                  <div class="progress-fill fill-teal" id="task-progress-fill"></div>
+                </div>
+                <p class="word-meter-message" id="task-meter-message">
+                  Write at least 2 sentences (or 15+ words) to finish this task and collect your Star!
+                </p>
+              </div>
+
+              <!-- Optional Quick Sketch Toggle -->
+              <details class="quick-sketch-details" id="task-sketch-details">
+                <summary>Bonus: Add a Quick Drawing for This Task (Optional)</summary>
+                <div id="task-canvas-host" class="canvas-host-box"></div>
+              </details>
+
+              <div class="editor-actions">
+                <button type="button" id="task-clear-btn" class="btn btn-ghost btn-sm">Clear Writing</button>
+                <button type="button" id="task-submit-btn" class="btn btn-primary" disabled>
+                  Write 2 sentences to finish
+                </button>
+              </div>
+
+              <div id="task-submit-feedback" class="submission-feedback hidden" aria-live="polite"></div>
+            </div>
+          </div>
+
+          <div class="mission-footer-nav no-print">
+            <button type="button" id="prev-task-btn" class="btn btn-secondary">Previous Task</button>
+            <button type="button" id="next-task-btn" class="btn btn-secondary">Next Task</button>
+          </div>
+        </section>
+      </section>
+
+      <!-- VIEW 5: PROJECTS HUB -->
+      <section id="projects-view" class="projects-view container hidden">
+        <div class="view-top-banner">
+          <div>
+            <span class="section-tag tag-emerald">Pillar 3 • Guided Mini-Projects</span>
+            <h1>My Hands-On Projects</h1>
+            <p>Take your time across a few days! Each project has 4 fun steps: Plan, Discover, Draw, and Show &amp; Tell.</p>
+          </div>
+        </div>
+
+        <div id="projects-grid" class="cards-grid projects-cards-grid"></div>
+      </section>
+
+      <!-- VIEW 6: ACTIVE PROJECT STUDIO -->
+      <section id="project-detail-view" class="project-detail-view container hidden" aria-live="polite">
+        <div class="mission-nav-bar no-print">
+          <button type="button" id="back-to-projects-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>All Projects</span>
+          </button>
+
+          <div id="project-stepper" class="mission-stepper" role="navigation" aria-label="Switch project"></div>
+
+          <button type="button" id="project-preview-poster-btn" class="btn btn-outline btn-sm">Print Poster</button>
+        </div>
+
+        <article class="mission-banner project-banner" id="project-banner"></article>
+        <div id="project-feedback-banner" class="teacher-stamp-banner hidden"></div>
+
+        <!-- Project Motion Scene -->
+        <div id="project-motion-stage" class="motion-stage"></div>
+
+        <!-- 4-Step Milestone Bar -->
+        <div class="milestones-card">
+          <div class="milestones-head">
+            <h2>My 4 Project Milestones</h2>
+            <span id="project-steps-badge" class="warmup-score-pill">0 / 4 Steps Done</span>
+          </div>
+          <div id="project-milestones-bar" class="milestones-bar"></div>
+        </div>
+
+        <!-- Step 1: Wonder & Plan -->
+        <section class="project-step-card" id="project-step-1">
+          <div class="project-step-head">
+            <span class="step-circle">1</span>
+            <div>
+              <span class="section-tag tag-amber">Step 1 • Wonder &amp; Plan</span>
+              <h2 id="p-step1-title">Get Ready &amp; Plan Your Idea</h2>
+            </div>
+            <label class="step-done-toggle">
+              <input type="checkbox" class="project-step-checkbox" data-step="0">
+              <span>Step 1 Done</span>
+            </label>
+          </div>
+          <div class="project-step-body two-col-step">
+            <div>
+              <h3>Materials / Helper Checklist</h3>
+              <div id="project-materials-list" class="outline-checklist"></div>
+            </div>
+            <div>
+              <label for="project-plan-input" class="editor-label" id="p-plan-label">My Plan:</label>
+              <textarea id="project-plan-input" class="mini-textarea" rows="4" placeholder="Write your plan here..."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 2: Do & Discover -->
+        <section class="project-step-card" id="project-step-2">
+          <div class="project-step-head">
+            <span class="step-circle">2</span>
+            <div>
+              <span class="section-tag tag-teal">Step 2 • Do &amp; Discover</span>
+              <h2 id="p-step2-title">Observe, Try, or Build!</h2>
+            </div>
+            <label class="step-done-toggle">
+              <input type="checkbox" class="project-step-checkbox" data-step="1">
+              <span>Step 2 Done</span>
+            </label>
+          </div>
+          <div class="project-step-body">
+            <p id="p-step2-desc" class="step-lead"></p>
+            <div id="project-discover-list" class="discover-list"></div>
+          </div>
+        </section>
+
+        <!-- Step 3: Create & Draw -->
+        <section class="project-step-card" id="project-step-3">
+          <div class="project-step-head">
+            <span class="step-circle">3</span>
+            <div>
+              <span class="section-tag tag-emerald">Step 3 • Create &amp; Draw</span>
+              <h2 id="p-step3-title">Draw Your Project Picture</h2>
+            </div>
+            <label class="step-done-toggle">
+              <input type="checkbox" class="project-step-checkbox" data-step="2">
+              <span>Step 3 Done</span>
+            </label>
+          </div>
+          <div class="project-step-body">
+            <p id="p-step3-desc" class="step-lead"></p>
+            <div id="project-canvas-host" class="canvas-host-box"></div>
+            <div class="form-field" style="margin-top: 14px;">
+              <label for="project-caption-input">Picture Title / Caption</label>
+              <input type="text" id="project-caption-input" class="text-input" placeholder="Give your drawing a fun title!">
+            </div>
+          </div>
+        </section>
+
+        <!-- Step 4: Show & Tell -->
+        <section class="project-step-card" id="project-step-4">
+          <div class="project-step-head">
+            <span class="step-circle">4</span>
+            <div>
+              <span class="section-tag tag-teal">Step 4 • Show &amp; Tell</span>
+              <h2 id="p-step4-title">Explain Your Project</h2>
+            </div>
+            <label class="step-done-toggle">
+              <input type="checkbox" class="project-step-checkbox" data-step="3">
+              <span>Step 4 Done</span>
+            </label>
+          </div>
+          <div class="project-step-body">
+            <p id="p-step4-desc" class="step-lead"></p>
+            <div id="project-starter-chips" class="starter-chips" style="margin-bottom: 12px;"></div>
+            <textarea id="project-showcase-input" class="essay-textarea" rows="5" placeholder="Tell everyone about your project in 2–3 sentences..."></textarea>
+
+            <div class="editor-actions" style="margin-top: 16px;">
+              <span id="project-save-status" class="save-status">Auto-saved</span>
+              <button type="button" id="project-complete-btn" class="btn btn-primary">
+                Save &amp; Celebrate Project!
+              </button>
+            </div>
+            <div id="project-submit-feedback" class="submission-feedback hidden" aria-live="polite"></div>
+          </div>
+        </section>
+      </section>
+
+      <!-- VIEW 7: PRINTABLE WORKSHEET BOOK & REPORT -->
+      <section id="report-view" class="report-view container hidden">
+        <div class="report-toolbar no-print">
+          <button type="button" id="report-back-btn" class="btn btn-ghost">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="19" y1="12" x2="5" y2="12"/>
+              <polyline points="12 19 5 12 12 5"/>
+            </svg>
+            <span>Back to Home</span>
+          </button>
+
+          <div class="filter-pills" role="group" aria-label="Report section filter">
+            <button type="button" class="filter-pill is-active" data-report-mode="all">Full Book</button>
+            <button type="button" class="filter-pill" data-report-mode="routines">Routines</button>
+            <button type="button" class="filter-pill" data-report-mode="tasks">Tasks</button>
+            <button type="button" class="filter-pill" data-report-mode="projects">Project Posters</button>
+          </div>
+
+          <div class="report-export-actions">
+            <button type="button" id="copy-report-btn" class="btn btn-secondary btn-sm">Copy Text</button>
+            <button type="button" id="download-report-btn" class="btn btn-secondary btn-sm">Download .TXT</button>
+            <button type="button" id="print-report-btn" class="btn btn-primary btn-sm">Print / Save PDF</button>
+          </div>
+        </div>
+
+        <div id="report-sheet" class="report-sheet"></div>
+      </section>
+
+      <!-- VIEW 8: PARENT / TEACHER CONTROL PANEL -->
+      <section id="parent-view" class="parent-view container hidden">
+        <div class="admin-topbar no-print">
+          <div class="admin-title-group">
+            <span class="section-tag tag-teal">Parent / Teacher Control Panel</span>
+            <h1>Personalize, Review &amp; Encourage</h1>
+            <p>Customize the student's name &amp; daily routines, leave sticker stamps, and export weekly backups.</p>
+          </div>
+          <div class="admin-actions">
+            <span id="parent-sync-status" class="admin-refresh-status" aria-live="polite">
+              <span class="motion-live-dot" aria-hidden="true"></span>
+              <span>Local Save Active</span>
+            </span>
+            <button type="button" id="parent-sync-btn" class="btn btn-secondary btn-sm">Sync Cloud</button>
+            <button type="button" id="parent-export-csv-btn" class="btn btn-secondary btn-sm">Export CSV</button>
+            <button type="button" id="parent-export-json-btn" class="btn btn-secondary btn-sm">Backup .JSON</button>
+            <label for="parent-import-json-input" class="btn btn-secondary btn-sm" style="cursor: pointer;">
+              Import .JSON
+              <input type="file" id="parent-import-json-input" accept=".json,application/json" class="sr-only">
+            </label>
+            <button type="button" id="parent-logout-btn" class="btn btn-ghost btn-sm">Lock &amp; Exit</button>
+          </div>
+        </div>
+
+        <!-- KPI Summary -->
+        <div id="parent-kpi-grid" class="hero-stats-grid admin-kpi-grid"></div>
+
+        <!-- Personalization & Routine Manager -->
+        <div class="parent-two-col">
+          <div class="admin-table-card">
+            <h2>1. Student Personalization</h2>
+            <p class="card-sub">Changes show up immediately across the student's worksheet.</p>
+
+            <div class="form-field">
+              <label for="parent-student-name-input">Student Name / Nickname</label>
+              <input type="text" id="parent-student-name-input" class="text-input" placeholder="e.g., Mia, Leo, Kenzo...">
+            </div>
+
+            <div class="form-field" style="margin-top: 14px;">
+              <label for="parent-mascot-select">Learning Buddy Mascot</label>
+              <select id="parent-mascot-select" class="admin-select">
+                <option value="owl">Wise Little Owl</option>
+                <option value="fox">Curious Fox</option>
+                <option value="bunny">Sunny Bunny</option>
+                <option value="rocket">Space Rocket</option>
+              </select>
+            </div>
+
+            <div class="form-field" style="margin-top: 14px;">
+              <label for="parent-subtitle-input">Custom Greeting Note (Home Banner)</label>
+              <input type="text" id="parent-subtitle-input" class="text-input" placeholder="You are doing awesome every single day!">
+            </div>
+
+            <button type="button" id="parent-save-profile-btn" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+              Save Student Profile
+            </button>
+            <span id="parent-profile-msg" class="inline-feedback"></span>
+          </div>
+
+          <div class="admin-table-card">
+            <h2>2. Customize Daily Routines</h2>
+            <p class="card-sub">Add a new daily habit or toggle existing habits on/off.</p>
+
+            <form id="parent-add-routine-form" class="add-routine-form">
+              <select id="new-routine-group" class="admin-select" aria-label="Time of day">
+                <option value="morning">Morning Ready</option>
+                <option value="learning">Learning &amp; Reading</option>
+                <option value="evening">Evening Wind-Down</option>
+              </select>
+              <input type="text" id="new-routine-title" class="text-input" placeholder="Add a habit (e.g., Practice piano)" required>
+              <button type="submit" class="btn btn-primary btn-sm">Add Habit</button>
+            </form>
+
+            <div id="parent-routines-list" class="parent-routines-list"></div>
+          </div>
+        </div>
+
+        <!-- 7-Day Routine History -->
+        <div class="admin-table-card">
+          <h2>3. Recent 7-Day Routine Log</h2>
+          <div class="admin-table-wrap">
+            <table class="admin-roster-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Habits Checked</th>
+                  <th>Book Read</th>
+                  <th>Mood</th>
+                  <th>Daily Reflection</th>
+                </tr>
+              </thead>
+              <tbody id="parent-routine-history-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Review Tasks & Projects + Leave Sticker Stamps -->
+        <div class="admin-submissions-section">
+          <h2>4. Review Work &amp; Award Sticker Stamps</h2>
+          <p class="card-sub" style="margin-bottom: 16px;">Pick a sticker stamp and write a warm note—your student will see it on their Home screen and inside the Task or Project!</p>
+          <div id="parent-review-list" class="admin-submissions-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Confirm Clear Modal -->
+  <div id="confirm-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirm-modal-title">
+    <div class="modal-card">
+      <h3 id="confirm-modal-title">Clear your writing?</h3>
+      <p id="confirm-modal-desc">This will erase what you typed here so you can start fresh.</p>
+      <div class="modal-actions">
+        <button type="button" id="confirm-cancel-btn" class="btn btn-secondary">Keep My Work</button>
+        <button type="button" id="confirm-proceed-btn" class="btn btn-danger">Yes, Clear It</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Parent / Teacher Login Modal -->
+  <div id="parent-login-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="parent-modal-title">
+    <div class="modal-card">
+      <div class="admin-modal-head">
+        <span class="admin-lock-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </span>
+        <div>
+          <h3 id="parent-modal-title">Parent / Teacher Access</h3>
+          <p style="margin-bottom: 0;">Enter the passcode to customize routines, review work, and add sticker stamps.</p>
+        </div>
+      </div>
+
+      <form id="parent-login-form" class="admin-login-form">
+        <label for="parent-password-input" class="sr-only">Passcode</label>
+        <input
+          type="password"
+          id="parent-password-input"
+          class="admin-password-input"
+          placeholder="Enter passcode (default: 2026)..."
+          autocomplete="current-password"
+        >
+        <p id="parent-login-error" class="admin-login-error hidden" role="alert">
+          Incorrect passcode. Try 2026 (or your teacher password).
+        </p>
+        <div class="modal-actions">
+          <button type="button" id="parent-modal-cancel-btn" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Unlock Panel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/grade2/data.js"></script>
+  <script src="/grade2/motion.js"></script>
+  <script src="/grade2/canvas.js"></script>
+  <script src="/grade2/app.js"></script>
+</body>
+</html>
