@@ -46,6 +46,14 @@
             <span class="pill-dot" aria-hidden="true"></span>
             <span id="topbar-score-text">Nilai: 0 / 100</span>
           </div>
+
+          <button type="button" id="topbar-admin-btn" class="admin-mini-btn no-print" title="Dasbor Guru / Admin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Admin</span>
+          </button>
         </div>
       </div>
 
@@ -203,7 +211,46 @@
 
         <div id="essay-questions-container" class="essay-questions-container"></div>
       </section>
+
+      <!-- VIEW 4: ADMIN DASHBOARD (GURU) -->
+      <section id="view-admin" class="view-panel hidden">
+        <div class="section-header-bar">
+          <div>
+            <span class="eyebrow-tag">Dasbor Guru • IPS Kelas VIII</span>
+            <h2>Rekap Jawaban &amp; Nilai Siswa</h2>
+          </div>
+          <div class="quiz-controls-row">
+            <span id="admin-sync-status" class="admin-sync-pill">Memuat data...</span>
+            <button type="button" id="admin-refresh-btn" class="btn btn-secondary btn-sm">Muat Ulang</button>
+            <button type="button" id="admin-close-btn" class="btn btn-ghost btn-sm">Tutup Admin</button>
+          </div>
+        </div>
+
+        <div id="admin-kpi-grid" class="admin-kpi-grid"></div>
+
+        <div class="admin-toolbar">
+          <input type="search" id="admin-search-input" class="admin-search-input" placeholder="Cari nama siswa...">
+        </div>
+
+        <div id="admin-students-list" class="admin-students-list"></div>
+      </section>
     </main>
+  </div>
+
+  <!-- Admin Login Modal -->
+  <div id="admin-login-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="admin-modal-title">
+    <div class="modal-card">
+      <h3 id="admin-modal-title">Masuk Dasbor Guru</h3>
+      <p class="modal-desc">Masukkan kata sandi guru untuk melihat seluruh jawaban siswa (PG, Ujian PAS, dan Uraian).</p>
+      <form id="admin-login-form">
+        <input type="password" id="admin-password-input" class="modal-input" placeholder="Kata sandi..." autocomplete="current-password" required>
+        <p id="admin-login-error" class="modal-error hidden">Kata sandi salah. Silakan coba lagi.</p>
+        <div class="modal-actions">
+          <button type="button" id="admin-modal-cancel-btn" class="btn btn-ghost btn-sm">Batal</button>
+          <button type="submit" class="btn btn-primary btn-sm">Masuk</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="data.js"></script>

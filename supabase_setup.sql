@@ -53,3 +53,30 @@ USING (true)
 WITH CHECK (true);
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.thelab_ips7_submissions TO anon, authenticated;
+
+-- Grade 8 Social Studies (IPS Kelas 8) Submissions Table
+CREATE TABLE IF NOT EXISTS public.thelab_ips8_submissions (
+  student_name TEXT PRIMARY KEY,
+  practice_answers JSONB NOT NULL DEFAULT '{}'::jsonb,
+  exam_answers JSONB NOT NULL DEFAULT '{}'::jsonb,
+  exam_submitted BOOLEAN NOT NULL DEFAULT false,
+  essay_answers JSONB NOT NULL DEFAULT '{}'::jsonb,
+  essay_scores JSONB NOT NULL DEFAULT '{}'::jsonb,
+  practice_score INTEGER NOT NULL DEFAULT 0,
+  exam_score INTEGER NOT NULL DEFAULT 0,
+  essay_weighted_score NUMERIC NOT NULL DEFAULT 0,
+  total_score NUMERIC NOT NULL DEFAULT 0,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.thelab_ips8_submissions ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read/write on thelab_ips8_submissions" ON public.thelab_ips8_submissions;
+CREATE POLICY "Allow public read/write on thelab_ips8_submissions"
+ON public.thelab_ips8_submissions
+FOR ALL
+TO anon, authenticated
+USING (true)
+WITH CHECK (true);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.thelab_ips8_submissions TO anon, authenticated;

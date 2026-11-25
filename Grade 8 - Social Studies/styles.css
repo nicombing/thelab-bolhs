@@ -1334,6 +1334,191 @@ button, input, textarea {
   margin-bottom: 4px;
 }
 
+/* Admin Button, Modal & Dashboard */
+.admin-mini-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-mini-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.admin-mini-btn:hover {
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(17, 24, 39, 0.45);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.modal-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-md);
+}
+
+.modal-desc {
+  margin: 8px 0 14px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  font-size: 0.95rem;
+}
+
+.modal-error {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--accent-rose);
+  font-weight: 600;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.admin-sync-pill {
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-subtle);
+  color: var(--text-secondary);
+}
+
+.admin-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.admin-toolbar {
+  margin-bottom: 16px;
+}
+
+.admin-search-input {
+  width: 100%;
+  max-width: 360px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  font-size: 0.92rem;
+}
+
+.admin-students-list {
+  display: grid;
+  gap: 14px;
+}
+
+.admin-student-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-student-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-student-metrics {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 0.84rem;
+}
+
+.admin-metric-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg-subtle);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.admin-metric-chip.is-teal {
+  background: var(--bg-tint-teal);
+  color: var(--accent-teal);
+}
+
+.admin-student-details {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+  display: grid;
+  gap: 14px;
+}
+
+.admin-pg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+  font-size: 0.82rem;
+  font-family: var(--font-mono);
+}
+
+.admin-pg-cell {
+  padding: 5px 8px;
+  border-radius: 6px;
+  background: var(--bg-subtle);
+}
+
+.admin-pg-cell.is-correct {
+  background: var(--accent-emerald-soft);
+  color: var(--accent-emerald);
+}
+
+.admin-pg-cell.is-wrong {
+  background: var(--accent-rose-soft);
+  color: var(--accent-rose);
+}
+
+.admin-essay-item {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-page);
+  border: 1px solid var(--border-soft);
+  font-size: 0.88rem;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .reading-layout,

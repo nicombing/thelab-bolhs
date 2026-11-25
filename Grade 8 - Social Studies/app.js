@@ -4,6 +4,15 @@
   const STORAGE_KEY = "ips8_pas_prep_v1";
   const DATA = window.IPS8_DATA;
   const UNLOCK_AT_MS = new Date("2026-11-25T15:25:00+07:00").getTime();
+  const ADMIN_PASSWORD = "qw3rty";
+  const SUPABASE_URL = "https://dcoqoonpdxtfhslyjirb.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_2KMKUCuf1tCSOZ5CfLIkcw_HM81Xq9h";
+  const SUPABASE_TABLE = "thelab_ips8_submissions";
+
+  let isAdminUnlocked = false;
+  let adminRows = [];
+  let expandedStudents = new Set();
+  let syncTimer = null;
 
   function isQuizLocked() {
     return Date.now() < UNLOCK_AT_MS;
@@ -55,6 +64,67 @@
     } catch {
       // Ignore storage quota errors
     }
+    scheduleCloudSync();
+  }
+
+  async function supabaseRequest(path, opts = {}) {
+    const headers = Object.assign(
+      {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json"
+      },
+      opts.headers || {}
+    );
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, Object.assign({}, opts, { headers }));
+    if (!res.ok) {
+      const txt = await res.text().catch(() => "");
+      throw new Error(`Supabase ${res.status}: ${txt}`);
+    }
+    const text = await res.text();
+    return text ? JSON.parse(text) : null;
+  }
+
+  function scoreAnswersMap(answersMap) {
+    let correct = 0;
+    DATA.mcQuestions.forEach((q) => {
+      if (answersMap[q.id] === q.correctIndex) correct += 1;
+    });
+    return correct * 2;
+  }
+
+  function scheduleCloudSync() {
+    const name = (state.studentName || "").trim();
+    if (!name) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(async () => {
+      try {
+        const practiceScore = scoreAnswersMap(state.pgAnswers);
+        const examScore = scoreAnswersMap(state.examAnswers);
+        const essay = calculateEssayMetrics();
+        const bestPgScore = state.examSubmitted ? examScore : practiceScore;
+        const payload = {
+          student_name: name,
+          practice_answers: state.pgAnswers,
+          exam_answers: state.examAnswers,
+          exam_submitted: Boolean(state.examSubmitted),
+          essay_answers: state.essayAnswers,
+          essay_scores: state.essayScores,
+          practice_score: practiceScore,
+          exam_score: examScore,
+          essay_weighted_score: essay.score,
+          total_score: bestPgScore + essay.score,
+          updated_at: new Date().toISOString()
+        };
+        await supabaseRequest(`${SUPABASE_TABLE}?on_conflict=student_name`, {
+          method: "POST",
+          headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+          body: JSON.stringify(payload)
+        });
+      } catch {
+        // Silent background sync retry on next change
+      }
+    }, 800);
   }
 
   function escapeHtml(str) {
@@ -117,13 +187,18 @@
 
   // View Switching
   function setActiveView(viewName) {
-    const validViews = ["reading", "quiz-pg", "quiz-essay"];
+    const validViews = ["reading", "quiz-pg", "quiz-essay", "admin"];
     let nextView = validViews.includes(viewName) ? viewName : "reading";
+    if (nextView === "admin" && !isAdminUnlocked) {
+      nextView = "reading";
+    }
     if (isQuizLocked() && (nextView === "quiz-pg" || nextView === "quiz-essay")) {
       nextView = "reading";
     }
-    state.activeView = nextView;
-    saveState();
+    state.activeView = nextView === "admin" ? "reading" : nextView;
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {}
 
     document.querySelectorAll(".view-panel").forEach((el) => {
       el.classList.toggle("hidden", el.id !== `view-${nextView}`);
@@ -609,6 +684,161 @@
       saveState();
       renderEssayView();
     });
+
+    // Admin Modal & Dashboard
+    const adminModal = document.getElementById("admin-login-modal");
+    const adminPasswordInput = document.getElementById("admin-password-input");
+    const adminLoginError = document.getElementById("admin-login-error");
+
+    document.getElementById("topbar-admin-btn").addEventListener("click", () => {
+      if (isAdminUnlocked) {
+        setActiveView("admin");
+        loadAdminRows();
+      } else {
+        adminPasswordInput.value = "";
+        adminLoginError.classList.add("hidden");
+        adminModal.classList.remove("hidden");
+        adminPasswordInput.focus();
+      }
+    });
+
+    document.getElementById("admin-modal-cancel-btn").addEventListener("click", () => {
+      adminModal.classList.add("hidden");
+    });
+
+    document.getElementById("admin-login-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      if (adminPasswordInput.value === ADMIN_PASSWORD) {
+        isAdminUnlocked = true;
+        adminModal.classList.add("hidden");
+        setActiveView("admin");
+        loadAdminRows();
+      } else {
+        adminLoginError.classList.remove("hidden");
+      }
+    });
+
+    document.getElementById("admin-close-btn").addEventListener("click", () => setActiveView("reading"));
+    document.getElementById("admin-refresh-btn").addEventListener("click", () => loadAdminRows());
+    document.getElementById("admin-search-input").addEventListener("input", () => renderAdminDashboard());
+
+    document.getElementById("admin-students-list").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-toggle-student]");
+      if (!btn) return;
+      const name = btn.dataset.toggleStudent;
+      if (expandedStudents.has(name)) expandedStudents.delete(name);
+      else expandedStudents.add(name);
+      renderAdminDashboard();
+    });
+  }
+
+  async function loadAdminRows() {
+    const statusEl = document.getElementById("admin-sync-status");
+    statusEl.textContent = "Memuat data...";
+    try {
+      const rows = await supabaseRequest(`${SUPABASE_TABLE}?select=*&order=updated_at.desc`, { method: "GET" });
+      adminRows = Array.isArray(rows) ? rows : [];
+      statusEl.textContent = `Tersinkron (${adminRows.length} siswa)`;
+      renderAdminDashboard();
+    } catch (err) {
+      statusEl.textContent = "Gagal memuat (cek tabel Supabase)";
+      document.getElementById("admin-students-list").innerHTML = `<div class="info-banner"><p><strong>Gagal mengambil data:</strong> ${escapeHtml(err.message)}. Pastikan tabel <code>thelab_ips8_submissions</code> sudah dibuat di Supabase SQL Editor.</p></div>`;
+    }
+  }
+
+  function renderAdminDashboard() {
+    const query = (document.getElementById("admin-search-input").value || "").trim().toLowerCase();
+    const filtered = adminRows.filter((r) => (r.student_name || "").toLowerCase().includes(query));
+
+    const totalStudents = adminRows.length;
+    const examDoneCount = adminRows.filter((r) => r.exam_submitted).length;
+    const avgScore = totalStudents
+      ? Math.round((adminRows.reduce((s, r) => s + Number(r.total_score || 0), 0) / totalStudents) * 10) / 10
+      : 0;
+
+    document.getElementById("admin-kpi-grid").innerHTML = `
+      <div class="kpi-box"><span>Total Siswa Terdata</span><strong>${totalStudents}</strong></div>
+      <div class="kpi-box"><span>Selesai Ujian PAS</span><strong>${examDoneCount}</strong></div>
+      <div class="kpi-box kpi-total"><span>Rata-rata Nilai PAS</span><strong>${avgScore} / 100</strong></div>
+    `;
+
+    const letters = ["A", "B", "C", "D"];
+    const listEl = document.getElementById("admin-students-list");
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div class="info-banner"><p>Belum ada data jawaban siswa yang cocok.</p></div>`;
+      return;
+    }
+
+    listEl.innerHTML = filtered
+      .map((r) => {
+        const isExpanded = expandedStudents.has(r.student_name);
+        const practiceAns = r.practice_answers || {};
+        const examAns = r.exam_answers || {};
+        const essayAns = r.essay_answers || {};
+        const essayScores = r.essay_scores || {};
+        const updatedStr = r.updated_at ? new Date(r.updated_at).toLocaleString("id-ID") : "-";
+
+        let detailsHtml = "";
+        if (isExpanded) {
+          const activePgMap = Object.keys(examAns).length > 0 ? examAns : practiceAns;
+          const pgLabel = Object.keys(examAns).length > 0 ? "Jawaban Ujian PAS" : "Jawaban Mode Latihan";
+          const pgCells = DATA.mcQuestions
+            .map((q) => {
+              const sel = activePgMap[q.id];
+              if (typeof sel !== "number") {
+                return `<div class="admin-pg-cell">${q.id}. -</div>`;
+              }
+              const ok = sel === q.correctIndex;
+              return `<div class="admin-pg-cell ${ok ? "is-correct" : "is-wrong"}">${q.id}. ${letters[sel]} ${ok ? "✓" : "✗"}</div>`;
+            })
+            .join("");
+
+          const essayItems = DATA.essayQuestions
+            .map((q) => {
+              const ansText = (essayAns[q.id] || "").trim() || "(Belum dijawab)";
+              const sc = essayScores[q.id] ?? 0;
+              return `
+                <div class="admin-essay-item">
+                  <strong>Uraian ${q.id} (Skor Mandiri: ${sc}/${q.maxScore})</strong>
+                  <p>${escapeHtml(ansText)}</p>
+                </div>`;
+            })
+            .join("");
+
+          detailsHtml = `
+            <div class="admin-student-details">
+              <div>
+                <strong>${pgLabel} (25 Soal)</strong>
+                <div class="admin-pg-grid" style="margin-top:8px">${pgCells}</div>
+              </div>
+              <div>
+                <strong>Jawaban Uraian Analitis (8 Soal)</strong>
+                <div style="display:grid;gap:8px;margin-top:8px">${essayItems}</div>
+              </div>
+            </div>`;
+        }
+
+        return `
+          <article class="admin-student-card">
+            <div class="admin-student-head">
+              <div>
+                <strong>${escapeHtml(r.student_name)}</strong>
+                <div style="font-size:0.8rem;color:var(--text-muted)">Update: ${escapeHtml(updatedStr)}</div>
+              </div>
+              <div class="admin-student-metrics">
+                <span class="admin-metric-chip">Latihan: ${r.practice_score ?? 0}/50</span>
+                <span class="admin-metric-chip">Ujian PAS: ${r.exam_score ?? 0}/50 ${r.exam_submitted ? "(Selesai)" : ""}</span>
+                <span class="admin-metric-chip">Uraian: ${r.essay_weighted_score ?? 0}/50</span>
+                <span class="admin-metric-chip is-teal">Total: ${r.total_score ?? 0}/100</span>
+                <button type="button" class="btn btn-secondary btn-sm" data-toggle-student="${escapeHtml(r.student_name)}">
+                  ${isExpanded ? "Tutup Jawaban" : "Lihat Jawaban"}
+                </button>
+              </div>
+            </div>
+            ${detailsHtml}
+          </article>`;
+      })
+      .join("");
   }
 
   function updateLockState() {
