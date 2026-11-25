@@ -94,15 +94,14 @@ window.G2_DATA = {
   ],
 
   defaultRoutines: [
-    { id: "r-bed", group: "morning", title: "Make my bed & get dressed neatly", active: true },
-    { id: "r-teeth", group: "morning", title: "Brush my teeth & wash my face", active: true },
-    { id: "r-water", group: "morning", title: "Eat breakfast & drink a glass of water", active: true },
-    { id: "r-read", group: "learning", title: "Read aloud for 10 minutes", active: true },
-    { id: "r-task", group: "learning", title: "Work on 1 Worksheet Task or Project step", active: true },
-    { id: "r-desk", group: "learning", title: "Put pencils and books back nicely", active: true },
-    { id: "r-tidy", group: "evening", title: "Tidy up my toys and backpack for tomorrow", active: true },
-    { id: "r-share", group: "evening", title: "Tell Mom, Dad, or Teacher 1 thing I learned", active: true },
-    { id: "r-sleep", group: "evening", title: "Brush teeth & get ready for bed on time", active: true }
+    { id: "r-teras", group: "morning", title: "Membersihkan teras", active: true },
+    { id: "r-bed", group: "morning", title: "Merapikan tempat Tidur", active: true },
+    { id: "r-eggs", group: "morning", title: "Memanen Telur Ayam dan mencatat di app", active: true },
+    { id: "r-guitar", group: "learning", title: "Learn Guitar for 30 minutes", active: true },
+    { id: "r-read-write", group: "learning", title: "Read a book for 30 minutes or write a story at least 2 pages.", active: true },
+    { id: "r-taekwondo", group: "learning", title: "Practice Taekwondo Poomsae", active: true },
+    { id: "r-tidy-rooms", group: "evening", title: "Merapikan kamar dan ruang tengah", active: true },
+    { id: "r-journal", group: "evening", title: "Menulis Journal", active: true }
   ],
 
   tasks: [

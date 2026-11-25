@@ -6,6 +6,7 @@
   const CANVAS = window.G2_CANVAS || {};
 
   const STORAGE_KEY = "thelab_g2_worksheet_v1";
+  const ROUTINES_VERSION = 2;
   const PARENT_PASSCODES = ["2026", "qw3rty"];
   const MIN_WORDS_GOAL = 15;
   const MIN_SENTENCES_GOAL = 2;
@@ -154,6 +155,7 @@
 
     return {
       profile: Object.assign({}, DATA.defaultProfile),
+      routinesVersion: ROUTINES_VERSION,
       routines: (DATA.defaultRoutines || []).map((r) => Object.assign({}, r)),
       routineLogs: {},
       tasks: tasksMap,
@@ -171,14 +173,24 @@
       base.profile = Object.assign(base.profile, raw.profile);
     }
     if (Array.isArray(raw.routines) && raw.routines.length > 0) {
-      base.routines = raw.routines.map((r) => ({
+      const normalizedRoutines = raw.routines.map((r) => ({
         id: String(r.id || "r-" + Math.random().toString(36).slice(2, 8)),
         group: ["morning", "learning", "evening"].includes(r.group) ? r.group : "morning",
         title: String(r.title || "Daily Habit"),
         active: r.active !== false,
         custom: Boolean(r.custom)
       }));
+      if ((Number(raw.routinesVersion) || 0) < ROUTINES_VERSION) {
+        const customOnly = normalizedRoutines.filter((r) => r.custom);
+        base.routines = [
+          ...(DATA.defaultRoutines || []).map((r) => Object.assign({}, r)),
+          ...customOnly
+        ];
+      } else {
+        base.routines = normalizedRoutines;
+      }
     }
+    base.routinesVersion = ROUTINES_VERSION;
     if (raw.routineLogs && typeof raw.routineLogs === "object") {
       Object.keys(raw.routineLogs).forEach((dateKey) => {
         const entry = raw.routineLogs[dateKey];
