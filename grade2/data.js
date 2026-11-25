@@ -3,26 +3,55 @@
 window.G2_DATA = {
   defaultProfile: {
     studentName: "Hize",
-    mascot: "owl",
+    mascot: "explorer",
     greetingNote:
       "Check off your daily Routines, try a fun interactive Task, and build your step-by-step Projects. Every little step earns bright stars!"
   },
 
   mascots: {
-    owl: {
-      name: "Ollie the Wise Owl",
-      tip: "Hoo-hoo! Tap a card below to start. Remember, you can click Read Aloud whenever you want to listen!",
+    explorer: {
+      name: "Hizekiya Eklam",
+      tip: "Abang Hize anak baik, Papai dan Mamai mau abang menjadi anak yang hebat. Ayuk bentuk karaktermu dengan memulai kebiasaan yang baik",
       svg: `
         <svg viewBox="0 0 80 80" fill="none" aria-hidden="true">
-          <circle cx="40" cy="43" r="24" fill="#0f766e"/>
-          <path d="M22 25 L29 14 L34 23 Z" fill="#0d625b"/>
-          <path d="M58 25 L51 14 L46 23 Z" fill="#0d625b"/>
-          <ellipse cx="40" cy="52" rx="14" ry="12" fill="#ccfbf1"/>
-          <circle cx="31" cy="36" r="8" fill="#ffffff"/>
-          <circle cx="49" cy="36" r="8" fill="#ffffff"/>
-          <circle cx="32" cy="36" r="3.6" fill="#1f2937"/>
-          <circle cx="48" cy="36" r="3.6" fill="#1f2937"/>
-          <path d="M36 42 L40 48 L44 42 Z" fill="#f59e0b"/>
+          <!-- Colorful Up-style balloons floating behind -->
+          <line x1="17" y1="26" x2="26" y2="48" stroke="#94a3b8" stroke-width="1.4"/>
+          <line x1="63" y1="24" x2="54" y2="48" stroke="#94a3b8" stroke-width="1.4"/>
+          <line x1="25" y1="18" x2="31" y2="44" stroke="#94a3b8" stroke-width="1.2"/>
+          <circle cx="16" cy="20" r="8" fill="#fda4af"/>
+          <circle cx="25" cy="13" r="6.5" fill="#7dd3fc"/>
+          <circle cx="64" cy="18" r="8" fill="#fcd34d"/>
+          <circle cx="56" cy="12" r="6" fill="#86efac"/>
+
+          <!-- Shoulders & Explorer Shirt + Yellow Scout Neckerchief -->
+          <path d="M18 72 C20 57 30 53 40 53 C50 53 60 57 62 72 Z" fill="#38bdf8"/>
+          <path d="M30 54 L40 66 L50 54 Z" fill="#fbbf24" stroke="#d97706" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="40" cy="60" r="3" fill="#f97316"/>
+
+          <!-- Neck & Warm Cheerful Face (Jumbo / Up Boy Adventurer) -->
+          <rect x="36" y="48" width="8" height="8" rx="3" fill="#f3be92"/>
+          <circle cx="22" cy="40" r="4.5" fill="#f3be92"/>
+          <circle cx="58" cy="40" r="4.5" fill="#f3be92"/>
+          <circle cx="40" cy="39" r="18" fill="#f9cda6"/>
+
+          <!-- Soft Curly Dark Hair Tufts -->
+          <circle cx="24" cy="31" r="5" fill="#292524"/>
+          <circle cx="56" cy="31" r="5" fill="#292524"/>
+          <path d="M23 30 C26 20 54 20 57 30" fill="#292524"/>
+
+          <!-- Adventure Explorer Cap -->
+          <path d="M22 29 C23 16 57 16 58 29 Z" fill="#f59e0b"/>
+          <ellipse cx="40" cy="29" rx="20" ry="4" fill="#d97706"/>
+          <circle cx="40" cy="22.5" r="3.5" fill="#fef08a"/>
+
+          <!-- Happy Eyes, Rosy Cheeks & Big Smile -->
+          <circle cx="33" cy="38" r="2.7" fill="#1e293b"/>
+          <circle cx="47" cy="38" r="2.7" fill="#1e293b"/>
+          <circle cx="34" cy="37.2" r="0.9" fill="#ffffff"/>
+          <circle cx="48" cy="37.2" r="0.9" fill="#ffffff"/>
+          <ellipse cx="28" cy="43" rx="3.4" ry="2" fill="#fca5a5" opacity="0.75"/>
+          <ellipse cx="52" cy="43" rx="3.4" ry="2" fill="#fca5a5" opacity="0.75"/>
+          <path d="M33.5 45 Q40 51.5 46.5 45" stroke="#9a3412" stroke-width="2.4" stroke-linecap="round" fill="none"/>
         </svg>
       `
     },

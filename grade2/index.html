@@ -97,17 +97,10 @@
             </div>
           </div>
 
-          <aside class="hero-mascot-card" aria-label="Student companion and daily progress">
+          <aside class="hero-mascot-card" aria-label="Student avatar and parent message">
             <div class="mascot-badge-circle" id="home-mascot-svg" aria-hidden="true"></div>
-            <h2 id="home-mascot-name">My Learning Buddy</h2>
-            <p id="home-mascot-tip">Tap a card below to start! You can also click "Read Aloud" on any worksheet to listen.</p>
-            <button type="button" id="home-tts-welcome-btn" class="btn btn-secondary btn-sm">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-              </svg>
-              <span>Read Welcome Aloud</span>
-            </button>
+            <h2 id="home-mascot-name">Hizekiya Eklam</h2>
+            <p id="home-mascot-tip">Abang Hize anak baik, Papai dan Mamai mau abang menjadi anak yang hebat. Ayuk bentuk karaktermu dengan memulai kebiasaan yang baik</p>
           </aside>
         </div>
 
@@ -218,13 +211,6 @@
           </div>
           <div class="routine-header-pills">
             <div class="streak-pill" id="routine-streak-pill">0-Day Streak</div>
-            <button type="button" id="routine-read-aloud-btn" class="btn btn-secondary btn-sm">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-              </svg>
-              <span>Read My Routines</span>
-            </button>
           </div>
         </div>
 
@@ -317,23 +303,10 @@
                 <span class="section-tag tag-teal">Part 1 • Story &amp; Clues</span>
                 <span id="task-time-pill" class="meta-pill">3 min read</span>
               </div>
-              <div class="audio-controls" id="task-audio-controls">
-                <button type="button" id="tts-toggle-btn" class="btn btn-secondary btn-sm">
-                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
-                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
-                  </svg>
-                  <span id="tts-btn-label">Read Aloud</span>
-                </button>
-                <button type="button" id="tts-speed-btn" class="btn btn-ghost btn-sm" title="Switch reading speed">
-                  0.85x
-                </button>
-              </div>
             </div>
 
             <div class="reading-instruction">
-              Tap any <span class="vocab-sample">highlighted word</span> to hear it and see what it means!
+              Tap any <span class="vocab-sample">highlighted word</span> to see what it means!
             </div>
 
             <div id="task-motion-stage" class="motion-stage"></div>
@@ -350,7 +323,7 @@
                 <h3>Word Explorer</h3>
               </div>
               <div id="glossary-active-box" class="glossary-active-box">
-                <p class="glossary-placeholder">Tap any colorful word in the story to see its kid-friendly meaning and hear how to say it!</p>
+                <p class="glossary-placeholder">Tap any colorful word in the story to see its kid-friendly meaning!</p>
               </div>
               <div class="glossary-chip-list-label">Tap a Key Word:</div>
               <div id="glossary-chips" class="glossary-chips"></div>
@@ -674,7 +647,7 @@
             <div class="form-field" style="margin-top: 14px;">
               <label for="parent-mascot-select">Learning Buddy Mascot</label>
               <select id="parent-mascot-select" class="admin-select">
-                <option value="owl">Wise Little Owl</option>
+                <option value="explorer">Hizekiya Eklam (Adventure Explorer)</option>
                 <option value="fox">Curious Fox</option>
                 <option value="bunny">Sunny Bunny</option>
                 <option value="rocket">Space Rocket</option>

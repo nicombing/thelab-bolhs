@@ -26,9 +26,6 @@
   let activeTaskFilter = "all";
   let activeReportMode = "all";
   let selectedFillWord = null;
-  let speechRate = 0.85;
-  let isSpeaking = false;
-  let speechQueueToken = 0;
   let isParentUnlocked = false;
   let pendingConfirmAction = null;
   let cloudSyncTimer = null;
@@ -173,6 +170,9 @@
       base.profile = Object.assign(base.profile, raw.profile);
       if (!base.profile.studentName || base.profile.studentName === "Little Explorer") {
         base.profile.studentName = "Hize";
+      }
+      if (!base.profile.mascot || base.profile.mascot === "owl") {
+        base.profile.mascot = "explorer";
       }
     }
     if (Array.isArray(raw.routines) && raw.routines.length > 0) {
@@ -450,66 +450,6 @@
     };
   }
 
-  // ---------- Speech Synthesis (Read Aloud) ----------
-
-  function stopSpeech() {
-    speechQueueToken += 1;
-    isSpeaking = false;
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-    }
-    document.querySelectorAll(".reading-section-block.is-speaking").forEach((el) => {
-      el.classList.remove("is-speaking");
-    });
-    const label = document.getElementById("tts-btn-label");
-    if (label) label.textContent = "Read Aloud";
-  }
-
-  function speakText(text) {
-    if (!("speechSynthesis" in window) || !text) return;
-    stopSpeech();
-    const utter = new SpeechSynthesisUtterance(String(text));
-    utter.lang = "en-US";
-    utter.rate = speechRate;
-    window.speechSynthesis.speak(utter);
-  }
-
-  function startSpeechForTask(task) {
-    if (!("speechSynthesis" in window) || !task) return;
-    stopSpeech();
-    const token = ++speechQueueToken;
-    isSpeaking = true;
-    const label = document.getElementById("tts-btn-label");
-    if (label) label.textContent = "Stop Reading";
-
-    const readingSectionsEl = document.getElementById("task-reading-sections");
-    const sectionNodes = Array.from(readingSectionsEl.querySelectorAll(".reading-section-block"));
-    let idx = 0;
-
-    function speakNext() {
-      if (token !== speechQueueToken || idx >= task.sections.length) {
-        if (token === speechQueueToken) stopSpeech();
-        return;
-      }
-      sectionNodes.forEach((n, i) => n.classList.toggle("is-speaking", i === idx));
-      const sec = task.sections[idx];
-      const parts = [sec.heading, ...sec.paragraphs.map(stripVocabTokens)];
-      if (sec.factBox) parts.push(`${sec.factBox.title}. ${sec.factBox.text}`);
-      const utter = new SpeechSynthesisUtterance(parts.join(". "));
-      utter.lang = "en-US";
-      utter.rate = speechRate;
-      utter.onend = () => {
-        idx += 1;
-        speakNext();
-      };
-      utter.onerror = () => {
-        if (token === speechQueueToken) stopSpeech();
-      };
-      window.speechSynthesis.speak(utter);
-    }
-    speakNext();
-  }
-
   // ---------- View Navigation ----------
 
   const VIEWS = [
@@ -525,7 +465,6 @@
   let activeView = "home";
 
   function showView(viewName) {
-    stopSpeech();
     activeView = viewName;
     VIEWS.forEach((v) => {
       const el = document.getElementById(`${v}-view`);
@@ -548,7 +487,7 @@
   function renderTopbar() {
     const stats = getOverallStats();
     const name = state.profile.studentName || "Hize";
-    const mascot = (DATA.mascots && DATA.mascots[state.profile.mascot]) || DATA.mascots.owl;
+    const mascot = (DATA.mascots && DATA.mascots[state.profile.mascot]) || DATA.mascots.explorer;
 
     document.title = `${name}'s Worksheet — Routines, Tasks & Projects`;
     document.getElementById("brand-student-title").textContent = `${name}'s Worksheet`;
@@ -564,7 +503,7 @@
     renderTopbar();
     const stats = getOverallStats();
     const name = state.profile.studentName || "Hize";
-    const mascot = (DATA.mascots && DATA.mascots[state.profile.mascot]) || DATA.mascots.owl;
+    const mascot = (DATA.mascots && DATA.mascots[state.profile.mascot]) || DATA.mascots.explorer;
 
     document.getElementById("home-date-label").textContent = formatFriendlyDate(getTodayKey());
     document.getElementById("home-greeting-title").textContent = `Hi, ${name}! Ready for Today?`;
@@ -846,14 +785,10 @@
           <span class="glossary-word-title">${escapeHtml(termKey)}</span>
           <span class="glossary-word-pos">(${escapeHtml(entry.pos)})</span>
         </div>
-        <button type="button" id="hear-vocab-btn" class="speak-mini-btn">Hear Word</button>
       </div>
       <p class="glossary-word-def">${escapeHtml(entry.def)}</p>
       <p class="glossary-word-ex">"${escapeHtml(entry.ex)}"</p>
     `;
-    document.getElementById("hear-vocab-btn").addEventListener("click", () => {
-      speakText(`${termKey}. ${entry.def}`);
-    });
     document.querySelectorAll(".vocab-term, .glossary-chip").forEach((el) => {
       el.classList.toggle("is-active", el.dataset.term === termKey);
     });
@@ -892,7 +827,6 @@
           <div class="warmup-item">
             <div class="warmup-q-row">
               <div class="warmup-q-title">${qIdx + 1}. ${escapeHtml(q.question)}</div>
-              <button type="button" class="speak-mini-btn speak-q-btn" data-q-idx="${qIdx}">Read Question</button>
             </div>
             <div class="warmup-options">${optsHtml}</div>
             ${fbHtml}
@@ -909,13 +843,6 @@
         saveState();
         renderTaskWarmup(task);
         renderTopbar();
-      });
-    });
-
-    listEl.querySelectorAll(".speak-q-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const q = task.warmup[Number(btn.dataset.qIdx)];
-        if (q) speakText(q.question);
       });
     });
   }
@@ -1606,7 +1533,7 @@
 
     // Profile form values
     document.getElementById("parent-student-name-input").value = state.profile.studentName || "";
-    document.getElementById("parent-mascot-select").value = state.profile.mascot || "owl";
+    document.getElementById("parent-mascot-select").value = state.profile.mascot || "explorer";
     document.getElementById("parent-subtitle-input").value = state.profile.greetingNote || "";
 
     // Routines Manager
@@ -1786,19 +1713,7 @@
       });
     });
 
-    document.getElementById("home-tts-welcome-btn").addEventListener("click", () => {
-      const name = state.profile.studentName || "Hize";
-      speakText(`Hi ${name}! ${state.profile.greetingNote || DATA.defaultProfile.greetingNote}`);
-    });
-
     // Routines events
-    document.getElementById("routine-read-aloud-btn").addEventListener("click", () => {
-      const list = getActiveRoutines()
-        .map((r) => r.title)
-        .join(". ");
-      speakText(`Here are your daily routines: ${list}`);
-    });
-
     document.getElementById("routine-book-input").addEventListener("input", (e) => {
       getDayLog(selectedDateKey).readingBook = e.target.value;
       saveState();
@@ -1820,22 +1735,6 @@
     document.getElementById("back-to-tasks-btn").addEventListener("click", () => {
       renderTasksHub();
       showView("tasks");
-    });
-
-    document.getElementById("tts-toggle-btn").addEventListener("click", () => {
-      if (isSpeaking) {
-        stopSpeech();
-      } else {
-        const task = TASKS.find((t) => t.id === currentTaskId);
-        if (task) startSpeechForTask(task);
-      }
-    });
-
-    document.getElementById("tts-speed-btn").addEventListener("click", (e) => {
-      const rates = [0.75, 0.85, 1.0];
-      const nextIdx = (rates.indexOf(speechRate) + 1) % rates.length;
-      speechRate = rates[nextIdx];
-      e.target.textContent = `${speechRate}x`;
     });
 
     document.getElementById("task-writing-textarea").addEventListener("input", (e) => {
