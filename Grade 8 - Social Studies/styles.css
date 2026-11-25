@@ -288,6 +288,14 @@ button, input, textarea {
   background: rgba(255, 255, 255, 0.22);
 }
 
+.nav-tab.is-locked,
+.btn.is-locked {
+  opacity: 0.45;
+  filter: grayscale(1);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Buttons */
 .btn {
   display: inline-flex;

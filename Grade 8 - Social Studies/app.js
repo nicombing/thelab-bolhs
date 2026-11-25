@@ -3,6 +3,11 @@
 
   const STORAGE_KEY = "ips8_pas_prep_v1";
   const DATA = window.IPS8_DATA;
+  const UNLOCK_AT_MS = new Date("2026-11-25T15:25:00+07:00").getTime();
+
+  function isQuizLocked() {
+    return Date.now() < UNLOCK_AT_MS;
+  }
 
   const DEFAULT_STATE = {
     studentName: "",
@@ -97,7 +102,10 @@
   // View Switching
   function setActiveView(viewName) {
     const validViews = ["reading", "quiz-pg", "quiz-essay"];
-    const nextView = validViews.includes(viewName) ? viewName : "reading";
+    let nextView = validViews.includes(viewName) ? viewName : "reading";
+    if (isQuizLocked() && (nextView === "quiz-pg" || nextView === "quiz-essay")) {
+      nextView = "reading";
+    }
     state.activeView = nextView;
     saveState();
 
@@ -539,6 +547,35 @@
     });
   }
 
+  function updateLockState() {
+    const locked = isQuizLocked();
+    document.querySelectorAll('.nav-tab[data-view="quiz-pg"], .nav-tab[data-view="quiz-essay"]').forEach((btn) => {
+      btn.classList.toggle("is-locked", locked);
+      btn.disabled = locked;
+      btn.title = locked ? "Dibuka pukul 15.25 WIB" : "";
+      const badge = btn.querySelector(".nav-tab-badge");
+      if (badge) {
+        if (locked) {
+          if (!badge.dataset.originalText) badge.dataset.originalText = badge.textContent;
+          badge.textContent = "15.25 WIB";
+        } else if (badge.dataset.originalText) {
+          badge.textContent = badge.dataset.originalText;
+        }
+      }
+    });
+
+    const heroPgBtn = document.getElementById("hero-start-pg-btn");
+    if (heroPgBtn) {
+      heroPgBtn.classList.toggle("is-locked", locked);
+      heroPgBtn.disabled = locked;
+      heroPgBtn.textContent = locked ? "Kuis 25 PG (Dibuka 15.25 WIB)" : "Mulai Kuis 25 PG →";
+    }
+
+    if (locked && (state.activeView === "quiz-pg" || state.activeView === "quiz-essay")) {
+      setActiveView("reading");
+    }
+  }
+
   // Init
   function init() {
     document.getElementById("meta-guide-text").textContent = DATA.meta.guide;
@@ -547,7 +584,17 @@
     renderPgQuiz();
     renderEssayView();
     bindEvents();
+    updateLockState();
     setActiveView(state.activeView);
+
+    if (isQuizLocked()) {
+      const lockTimer = setInterval(() => {
+        if (!isQuizLocked()) {
+          updateLockState();
+          clearInterval(lockTimer);
+        }
+      }, 5000);
+    }
   }
 
   init();
