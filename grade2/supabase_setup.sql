@@ -4,7 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS public.thelab_g2_worksheet_state (
   record_id TEXT PRIMARY KEY,
-  student_name TEXT NOT NULL DEFAULT 'Little Explorer',
+  student_name TEXT NOT NULL DEFAULT 'Hize',
   payload JSONB NOT NULL DEFAULT '{}'::jsonb,
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

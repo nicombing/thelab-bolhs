@@ -2,7 +2,7 @@
 
 window.G2_DATA = {
   defaultProfile: {
-    studentName: "Little Explorer",
+    studentName: "Hize",
     mascot: "owl",
     greetingNote:
       "Check off your daily Routines, try a fun interactive Task, and build your step-by-step Projects. Every little step earns bright stars!"

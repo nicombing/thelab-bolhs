@@ -171,6 +171,9 @@
 
     if (raw.profile && typeof raw.profile === "object") {
       base.profile = Object.assign(base.profile, raw.profile);
+      if (!base.profile.studentName || base.profile.studentName === "Little Explorer") {
+        base.profile.studentName = "Hize";
+      }
     }
     if (Array.isArray(raw.routines) && raw.routines.length > 0) {
       const normalizedRoutines = raw.routines.map((r) => ({
@@ -284,7 +287,7 @@
         headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
         body: JSON.stringify({
           record_id: CLOUD_RECORD_ID,
-          student_name: state.profile.studentName || "Little Explorer",
+          student_name: state.profile.studentName || "Hize",
           payload: state,
           updated_at: state.updatedAt || new Date().toISOString()
         })
@@ -544,9 +547,10 @@
 
   function renderTopbar() {
     const stats = getOverallStats();
-    const name = state.profile.studentName || "Grade 2 Explorer";
+    const name = state.profile.studentName || "Hize";
     const mascot = (DATA.mascots && DATA.mascots[state.profile.mascot]) || DATA.mascots.owl;
 
+    document.title = `${name}'s Worksheet — Routines, Tasks & Projects`;
     document.getElementById("brand-student-title").textContent = `${name}'s Worksheet`;
     document.getElementById("star-bank-count").textContent = `${stats.totalStars} Stars`;
     if (mascot && mascot.svg) {
@@ -559,7 +563,7 @@
   function renderHome() {
     renderTopbar();
     const stats = getOverallStats();
-    const name = state.profile.studentName || "Little Explorer";
+    const name = state.profile.studentName || "Hize";
     const mascot = (DATA.mascots && DATA.mascots[state.profile.mascot]) || DATA.mascots.owl;
 
     document.getElementById("home-date-label").textContent = formatFriendlyDate(getTodayKey());
@@ -695,7 +699,7 @@
         .join("");
 
       return `
-        <article class="routine-group-card">
+        <article class="routine-group-card routine-group-${escapeHtml(grp.id)}">
           <div class="routine-group-head">
             <div>
               <span class="section-tag tag-amber">${escapeHtml(grp.badge)}</span>
@@ -1783,7 +1787,7 @@
     });
 
     document.getElementById("home-tts-welcome-btn").addEventListener("click", () => {
-      const name = state.profile.studentName || "Little Explorer";
+      const name = state.profile.studentName || "Hize";
       speakText(`Hi ${name}! ${state.profile.greetingNote || DATA.defaultProfile.greetingNote}`);
     });
 
